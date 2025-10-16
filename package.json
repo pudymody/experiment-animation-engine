@@ -1,0 +1,16 @@
+{
+  "name": "animation-engine",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "typescript-language-server": "^5.0.1",
+    "vite": "^7.1.7"
+  }
+}

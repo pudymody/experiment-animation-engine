@@ -8,8 +8,8 @@ interface Scene {
 }
 
 export default class DOMCanvas extends HTMLElement {
-	private $canvas: HTMLCanvasElement;
-	private $range: HTMLInputElement;
+	private $canvas: HTMLCanvasElement = document.createElement("canvas");
+	private $range: HTMLInputElement = document.createElement("input");
 	private ctx: CanvasRenderingContext2D;
 	private _isPlaying: boolean = false;
 	private $shadowRoot: ShadowRoot;
@@ -25,7 +25,6 @@ export default class DOMCanvas extends HTMLElement {
 		this.newFrame = this.newFrame.bind(this);
 		this.$shadowRoot = this.attachShadow({ mode: "closed" });
 
-		this.$canvas = document.createElement("canvas");
 		const ctx = this.$canvas.getContext("2d");
 		if (ctx === null) {
 			throw new Error("could not get context from canvas");
@@ -74,20 +73,18 @@ export default class DOMCanvas extends HTMLElement {
 		$stopButton.innerHTML = "Stop";
 		$stopButton.addEventListener("click", () => this.reset());
 
-		const $range = document.createElement("input");
-		$range.type = "range";
-		$range.min = "0";
-		$range.max = "0";
-		$range.addEventListener("input", (e) => {
+		this.$range.type = "range";
+		this.$range.min = "0";
+		this.$range.max = "0";
+		this.$range.addEventListener("input", (e) => {
 			this.playTime = (e.target as HTMLInputElement).valueAsNumber;
 		});
-		this.$range = $range;
 
 		const $div = document.createElement("div");
 		$div.appendChild($style);
 		$div.appendChild($playButton);
 		$div.appendChild($stopButton);
-		$div.appendChild($range);
+		$div.appendChild(this.$range);
 
 		this.$shadowRoot.appendChild($div);
 	}

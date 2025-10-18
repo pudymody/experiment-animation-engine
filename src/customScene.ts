@@ -1,14 +1,15 @@
 import { chain, group } from "./core/animation";
 import { Scene } from "./core/scene";
+import Circle from "./shapes/circle"
 
-export default class MyScene extends Scene {
+export default class extends Scene {
 	constructor() {
 		super();
 
 		this.width = 800;
 		this.height = 600;
 
-		const c = this.Circle({
+		const c = new Circle({
 			x: 10,
 			y: 10,
 			radius: 10,
@@ -16,6 +17,7 @@ export default class MyScene extends Scene {
 			strokeWidth: 0,
 			stroke: "transparent",
 		});
+		this.add(c);
 
 		this._endTime = chain([
 			c.x.to({

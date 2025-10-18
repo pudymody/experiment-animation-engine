@@ -1,4 +1,4 @@
-import { TimelineNumber } from "../core/animation_number.ts"
+import { TimelineNumber } from "../core/animation_number"
 
 export interface CircleProps {
 	x: number

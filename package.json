@@ -4,13 +4,27 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "start": "parcel",
+    "build": "parcel build"
+  },
+  "targets": {
+    "lib": {
+      "source": "src/engine/index.ts",
+      "distDir": "dist/",
+      "context": "browser",
+      "outputFormat": "esmodule",
+      "isLibrary": true,
+      "optimize": true
+    },
+    "app": {
+      "source": "src/index.html",
+      "distDir": "dist/",
+      "optimize": true
+    }
   },
   "devDependencies": {
-    "typescript": "~5.9.3",
-    "typescript-language-server": "^5.0.1",
-    "vite": "^7.1.7"
+    "parcel": "^2.16.0",
+    "typescript": "^5.9.3",
+    "typescript-language-server": "^5.0.1"
   }
 }

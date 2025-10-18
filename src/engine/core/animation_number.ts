@@ -1,7 +1,7 @@
 import type { Keyframe, KeyframeProps, Timeline } from "./animation"
 import type { Easing } from "./easing"
 
-import { Linear } from "./easing"
+import { linear } from "./easing"
 import { Clamp01, Lerp } from "./math"
 
 export class KeyframeNumber implements Keyframe<number> {
@@ -16,7 +16,7 @@ export class KeyframeNumber implements Keyframe<number> {
 		this.to = opts.to;
 		this.duration = opts.duration || 0;
 		this.at = opts.at || 0;
-		this.ease = opts.ease || Linear;
+		this.ease = opts.ease || linear;
 	}
 
 	value(time: number): number {
@@ -44,7 +44,7 @@ export class TimelineNumber implements Timeline<number> {
 				to: start,
 				duration: 0,
 				at: 0,
-				ease: Linear,
+				ease: linear,
 			})
 		]
 		this._currentValue = start;

@@ -1,8 +1,8 @@
-import Circle from "./shapes/circle"
+import Circle from "./shapes/circle.ts"
 export { Circle }
 
-export * from "./core/animation"
-export * from "./core/math"
-export * from "./core/easing"
-export * from "./core/animation_number"
-export * from "./core/scene"
+export * from "./core/animation.ts"
+export * from "./core/math.ts"
+export * from "./core/easing.ts"
+export * from "./core/animation_number.ts"
+export * from "./core/scene.ts"

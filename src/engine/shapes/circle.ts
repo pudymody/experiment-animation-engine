@@ -1,4 +1,4 @@
-import { TimelineNumber } from "../core/animation_number"
+import { TimelineNumber } from "../core/animation_number.ts"
 
 export interface CircleProps {
 	x: number
@@ -41,9 +41,12 @@ export default class Circle {
 		ctx.fillStyle = this.background;
 		ctx.strokeStyle = this.stroke;
 
-		ctx.lineWidth = this.strokeWidth.value;
 		ctx.arc(this.x.value, this.y.value, this.radius.value, 0, Math.PI * 2);
 		ctx.fill();
-		ctx.stroke();
+
+		if (this.strokeWidth.value > 0) {
+			ctx.lineWidth = this.strokeWidth.value;
+			ctx.stroke();
+		}
 	}
 }

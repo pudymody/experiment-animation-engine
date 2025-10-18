@@ -1,4 +1,4 @@
-import type { Easing } from "./easing"
+import type { Easing } from "./easing.ts"
 
 export interface KeyframeProps<T> {
 	from: T

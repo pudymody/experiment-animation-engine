@@ -34,54 +34,49 @@ function updatePreview() {
 }
 
 const view = new EditorView({
-	doc: `import { chain, group, Scene } from "${window.location}/engine/index.js";
+	doc: `import { chain, group, Scene, RED, TRANSPARENT, BLACK, easeOutQuad,easeInQuad, easeInExpo } from "${window.location}/engine/index.js";
 
-export default class MyScene extends Scene {
+export default class extends Scene {
 	constructor() {
 		super();
 
 		this.width = 800;
 		this.height = 600;
 
+		const circleRadius = 10;
 		const c = this.Circle({
-			x: 10,
-			y: 10,
-			radius: 10,
-			background: "red",
-			strokeWidth: 0,
-			stroke: "transparent",
+			x: this.width / 2 - circleRadius,
+			y: this.height / 2 - circleRadius,
+			radius: circleRadius,
+			background: TRANSPARENT,
+			strokeWidth: 2,
+			stroke: BLACK,
+			arc: 0,
 		});
 
 		this._endTime = chain([
-			c.x.to({
-				to: 800 - 10,
-				duration: 1000,
-			}),
-			c.y.to({
-				to: 600 - 10,
-				duration: 1000,
-			}),
-			c.x.to({
-				to: 10,
-				duration: 1000,
-			}),
-			c.y.to({
-				to: 10,
-				duration: 1000,
+			c.arc.to({
+				to: Math.PI * 2,
+				duration: 750,
+				ease: easeOutQuad,
 			}),
 			new group([
-				c.x.to({
-					to: 400 - 10,
-					duration: 1000,
+				c.background.to({
+					to: RED,
+					ease: easeInQuad,
+					duration: 500,
 				}),
-				c.y.to({
-					to: 300 - 10,
-					duration: 1000,
-				})
+				c.stroke.to({
+					to: RED,
+					ease: easeInQuad,
+					duration: 500,
+				}),
 			]),
+
 			c.radius.to({
 				to: 1000,
 				duration: 1000,
+				ease: easeInExpo
 			})
 		]);
 	}

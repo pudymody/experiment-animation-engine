@@ -18,13 +18,16 @@
     },
     "app": {
       "source": "src/index.html",
-      "distDir": "dist/",
-      "optimize": true
+      "distDir": "dist/"
     }
   },
   "devDependencies": {
     "parcel": "^2.16.0",
     "typescript": "^5.9.3",
     "typescript-language-server": "^5.0.1"
+  },
+  "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.4",
+    "codemirror": "^6.0.2"
   }
 }

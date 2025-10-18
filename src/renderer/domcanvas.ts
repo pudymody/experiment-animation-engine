@@ -39,7 +39,9 @@ export default class DOMCanvas extends HTMLElement {
 		const $style = document.createElement("style");
 		$style.innerHTML = `
 			:host {
-				display: block;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
 				width: 100%;
 				height: 100%;
 				box-sizing: border-box;
@@ -48,7 +50,7 @@ export default class DOMCanvas extends HTMLElement {
 
 			canvas {
 				display: block;
-				width: 100%;
+				max-width: 100%;
 			}
 
 			div {
@@ -57,6 +59,7 @@ export default class DOMCanvas extends HTMLElement {
 				gap: 0.5rem;
 				padding: 0.5rem;
 				background: #2a2b2b;
+				width: 100%;
 			}
 
 			input {
@@ -101,12 +104,21 @@ export default class DOMCanvas extends HTMLElement {
 		return this._src;
 	}
 
-	set src(src: Scene) {
-		this.$canvas.width = src.width;
-		this.$canvas.height = src.height;
-		this._src = src;
-		this.$range.max = src.endTime.toString();
-		this.reset();
+	set src(src: string) {
+		import(src)
+			.then(({ default: scene }) => scene)
+			.then(scene => {
+				if (scene === undefined) {
+					throw new Error("Invalid scene, make sure you are exporting it as the default")
+				}
+
+				const src = new scene();
+				this.$canvas.width = src.width;
+				this.$canvas.height = src.height;
+				this._src = src;
+				this.$range.max = src.endTime.toString();
+				this.reset();
+			})
 	}
 
 	play() {

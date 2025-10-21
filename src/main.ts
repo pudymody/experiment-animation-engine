@@ -34,7 +34,7 @@ function updatePreview() {
 }
 
 const view = new EditorView({
-	doc: `import { chain, group, Scene, RED, TRANSPARENT, BLACK, easeOutQuad,easeInQuad, easeInExpo } from "${window.location}/engine/index.js";
+	doc: `import { chain, group, Scene, RED, TRANSPARENT, BLACK, easeOutQuad,easeInQuad, easeInExpo } from "${window.location}engine/index.js";
 
 export default class extends Scene {
 	constructor() {
@@ -91,11 +91,3 @@ export default class extends Scene {
 	]
 })
 updatePreview();
-
-// $editor.dispatchEvent(new FocusEvent("blur"))
-//
-// TODO
-//
-// Make exporter
-//
-// Make text editor

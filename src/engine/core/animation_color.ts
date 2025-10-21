@@ -22,13 +22,15 @@ export class Color {
 	}
 }
 
-const RED = new Color(255, 0, 0, 255);
-const GREEN = new Color(0, 255, 0, 255);
-const BLUE = new Color(0, 0, 255, 255);
-const BLACK = new Color(0, 0, 0, 255);
-const WHITE = new Color(255, 255, 255, 255);
-const TRANSPARENT = new Color(255, 255, 255, 0);
-export { RED, GREEN, BLUE, BLACK, WHITE, TRANSPARENT };
+const Colors = {
+	RED: new Color(255, 0, 0, 255),
+	GREEN: new Color(0, 255, 0, 255),
+	BLUE: new Color(0, 0, 255, 255),
+	BLACK: new Color(0, 0, 0, 255),
+	WHITE: new Color(255, 255, 255, 255),
+	TRANSPARENT: new Color(255, 255, 255, 0),
+}
+export { Colors };
 
 export class KeyframeColor implements Keyframe<Color> {
 	private from: Color;

@@ -38,7 +38,7 @@ function updatePreview() {
 }
 
 const view = new EditorView({
-	doc: `import { chain, group, Scene, RED, TRANSPARENT, BLACK, Easing } from "${window.location}engine.js";
+	doc: `import { chain, group, Scene, Colors, Easing } from "${window.location}engine.js";
 
 export default class extends Scene {
 	constructor() {
@@ -52,9 +52,9 @@ export default class extends Scene {
 			x: this.width / 2 - circleRadius,
 			y: this.height / 2 - circleRadius,
 			radius: circleRadius,
-			background: TRANSPARENT,
+			background: Colors.TRANSPARENT,
 			strokeWidth: 2,
-			stroke: BLACK,
+			stroke: Colors.BLACK,
 			arc: 0,
 		});
 
@@ -66,12 +66,12 @@ export default class extends Scene {
 			}),
 			new group([
 				c.background.to({
-					to: RED,
+					to: Colors.RED,
 					ease: Easing.easeInQuad,
 					duration: 500,
 				}),
 				c.stroke.to({
-					to: RED,
+					to: Colors.RED,
 					ease: Easing.easeInQuad,
 					duration: 500,
 				}),

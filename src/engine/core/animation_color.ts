@@ -1,8 +1,8 @@
-import type { Keyframe, KeyframeProps, Timeline } from "./animation.ts"
-import type { Easing } from "./easing.ts"
+import type { Keyframe, KeyframeProps, Timeline } from "./animation"
+import type { Easing } from "./easing"
 
-import { linear } from "./easing.ts"
-import { Clamp01, Lerp } from "./math.ts"
+import { linear } from "./easing"
+import { Clamp01, Lerp } from "./math"
 
 export class Color {
 	public r: number;

@@ -1,6 +1,6 @@
-import type { Color } from "../core/animation_color.ts"
-import { TimelineColor } from "../core/animation_color.ts"
-import { TimelineNumber } from "../core/animation_number.ts"
+import type { Color } from "../core/animation_color"
+import { TimelineColor } from "../core/animation_color"
+import { TimelineNumber } from "../core/animation_number"
 
 export interface CircleProps {
 	x: number

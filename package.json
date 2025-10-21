@@ -4,25 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "parcel",
-    "build": "parcel build"
-  },
-  "targets": {
-    "lib": {
-      "source": "src/engine/index.ts",
-      "distDir": "dist/",
-      "context": "browser",
-      "outputFormat": "esmodule",
-      "isLibrary": true,
-      "optimize": true
-    },
-    "app": {
-      "source": "src/index.html",
-      "distDir": "dist/"
-    }
+    "start": "rollup -c --watch",
+    "build": "rollup -c"
   },
   "devDependencies": {
-    "parcel": "^2.16.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.4",
+    "rollup": "^4.52.5",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-serve": "^3.0.0",
     "typescript": "^5.9.3",
     "typescript-language-server": "^5.0.1"
   },

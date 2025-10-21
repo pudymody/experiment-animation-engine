@@ -1,6 +1,10 @@
+// TODO
+//
+// Make exporter
+//
 import { javascript } from "@codemirror/lang-javascript"
 import { EditorView, basicSetup } from "codemirror"
-import DOMCanvas from "./renderer/domcanvas.ts";
+import DOMCanvas from "./renderer/domcanvas";
 
 customElements.define("canvas-player", DOMCanvas);
 
@@ -34,7 +38,7 @@ function updatePreview() {
 }
 
 const view = new EditorView({
-	doc: `import { chain, group, Scene, RED, TRANSPARENT, BLACK, easeOutQuad,easeInQuad, easeInExpo } from "${window.location}engine/index.js";
+	doc: `import { chain, group, Scene, RED, TRANSPARENT, BLACK, Easing } from "${window.location}engine.js";
 
 export default class extends Scene {
 	constructor() {
@@ -58,17 +62,17 @@ export default class extends Scene {
 			c.arc.to({
 				to: Math.PI * 2,
 				duration: 750,
-				ease: easeOutQuad,
+				ease: Easing.easeOutQuad,
 			}),
 			new group([
 				c.background.to({
 					to: RED,
-					ease: easeInQuad,
+					ease: Easing.easeInQuad,
 					duration: 500,
 				}),
 				c.stroke.to({
 					to: RED,
-					ease: easeInQuad,
+					ease: Easing.easeInQuad,
 					duration: 500,
 				}),
 			]),
@@ -76,7 +80,7 @@ export default class extends Scene {
 			c.radius.to({
 				to: 1000,
 				duration: 1000,
-				ease: easeInExpo
+				ease: Easing.easeInExpo
 			})
 		]);
 	}

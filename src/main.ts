@@ -5,6 +5,7 @@
 import { javascript } from "@codemirror/lang-javascript"
 import { EditorView, basicSetup } from "codemirror"
 import DOMCanvas from "./renderer/domcanvas";
+import MP4Renderer from "./renderer/mp4";
 
 customElements.define("canvas-player", DOMCanvas);
 
@@ -17,6 +18,32 @@ const $editor = document.querySelector("#editor")
 if ($editor === null) {
 	throw new Error("could not get editor");
 }
+
+const $exporter = document.querySelector("#export");
+if ($exporter === null) {
+	throw new Error("could not get export button");
+}
+
+$exporter.addEventListener("click", function(_) {
+	if (url === undefined) {
+		return;
+	}
+
+	import(url)
+		.then(({ default: scene }) => scene)
+		.then(scene => {
+			if (scene === undefined) {
+				throw new Error("Invalid scene, make sure you are exporting it as the default")
+			}
+
+			const src = new scene();
+			const renderer = new MP4Renderer(src);
+			renderer.export().then(blob => {
+				const url = window.URL.createObjectURL(blob);
+				window.open(url, "_blank");
+			});
+		});
+})
 
 let url: string;
 function updatePreview() {

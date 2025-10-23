@@ -1,11 +1,4 @@
-interface Scene {
-	width: number;
-	height: number;
-	background: string;
-	currentTime: number,
-	endTime: number,
-	draw(ctx: CanvasRenderingContext2D): void
-}
+import type { Scene } from "../engine/core/scene";
 
 export default class DOMCanvas extends HTMLElement {
 	private $canvas: HTMLCanvasElement = document.createElement("canvas");

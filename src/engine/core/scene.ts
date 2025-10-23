@@ -1,12 +1,23 @@
 import type { CircleProps } from "../shapes/circle"
 import Circle from "../shapes/circle";
 
+export interface DrawingContext extends CanvasRect, CanvasPath, CanvasDrawPath, CanvasPathDrawingStyles, CanvasFillStrokeStyles { };
+
 interface Object {
 	update(time: number): void
-	draw(ctx: CanvasRenderingContext2D): void
+	draw(ctx: DrawingContext): void
+};
+
+export interface Scene {
+	width: number;
+	height: number;
+	background: string;
+	currentTime: number,
+	endTime: number,
+	draw(ctx: DrawingContext): void
 }
 
-export class Scene {
+export class DefaultScene {
 	private _objects: Object[] = [];
 	private _currentTime: number = 0;
 	protected _endTime: number = 0;
@@ -38,7 +49,7 @@ export class Scene {
 		}
 	}
 
-	draw(ctx: CanvasRenderingContext2D): void {
+	draw(ctx: DrawingContext): void {
 		ctx.fillStyle = this.background;
 		ctx.fillRect(0, 0, this.width, this.height);
 		for (let o of this._objects) {

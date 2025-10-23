@@ -7,20 +7,13 @@ import {
 	getFirstEncodableVideoCodec
 } from 'mediabunny';
 
-interface Scene {
-	width: number;
-	height: number;
-	background: string;
-	currentTime: number,
-	endTime: number,
-	draw(ctx: CanvasRenderingContext2D): void
-}
+import type { Scene } from '../engine/core/scene';
 
 export default class MP4Renderer {
 	private scene: Scene;
 	private fps: number = 60;
 	private canvas: OffscreenCanvas;
-	private ctx: OffscreenCanvasRenderingContext2D;;
+	private ctx: OffscreenCanvasRenderingContext2D;
 
 	constructor(scene: Scene) {
 		this.scene = scene;

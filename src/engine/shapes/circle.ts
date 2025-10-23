@@ -1,6 +1,7 @@
 import type { Color } from "../core/animation_color"
 import { TimelineColor } from "../core/animation_color"
 import { TimelineNumber } from "../core/animation_number"
+import type { DrawingContext } from "../core/scene"
 
 export interface CircleProps {
 	x: number
@@ -47,7 +48,7 @@ export default class Circle {
 		this.stroke.update(time);
 	}
 
-	draw(ctx: CanvasRenderingContext2D) {
+	draw(ctx: DrawingContext) {
 		ctx.beginPath();
 
 		ctx.fillStyle = this.background.value.toString();

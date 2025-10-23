@@ -1,7 +1,3 @@
-// TODO
-//
-// Make exporter
-//
 import { javascript } from "@codemirror/lang-javascript"
 import { EditorView, basicSetup } from "codemirror"
 import DOMCanvas from "./renderer/domcanvas";
@@ -24,6 +20,7 @@ if ($exporter === null) {
 	throw new Error("could not get export button");
 }
 
+let videoURL: string;
 $exporter.addEventListener("click", function(_) {
 	if (url === undefined) {
 		return;
@@ -39,8 +36,11 @@ $exporter.addEventListener("click", function(_) {
 			const src = new scene();
 			const renderer = new MP4Renderer(src);
 			renderer.export().then(blob => {
-				const url = window.URL.createObjectURL(blob);
-				window.open(url, "_blank");
+				if (videoURL !== undefined) {
+					window.URL.revokeObjectURL(videoURL);
+				}
+				videoURL = window.URL.createObjectURL(blob);
+				window.open(videoURL, "_blank");
 			});
 		});
 })
@@ -65,9 +65,9 @@ function updatePreview() {
 }
 
 const view = new EditorView({
-	doc: `import { chain, group, Scene, Colors, Easing } from "${window.location}engine.js";
+	doc: `import { chain, group, DefaultScene, Colors, Easing } from "${window.location}engine.js";
 
-export default class extends Scene {
+export default class extends DefaultScene {
 	constructor() {
 		super();
 

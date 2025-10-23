@@ -154,9 +154,6 @@ export default class DOMCanvas extends HTMLElement {
 
 		if (this._src !== undefined) {
 			this._src.currentTime = value;
-
-			this.ctx.fillStyle = this._src.background;
-			this.ctx.fillRect(0, 0, this.$canvas.width, this.$canvas.height);
 			this._src.draw(this.ctx);
 
 			const currentTimeEvent = new CustomEvent("currentTime", { detail: value });

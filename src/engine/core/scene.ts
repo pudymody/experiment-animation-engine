@@ -39,6 +39,8 @@ export class Scene {
 	}
 
 	draw(ctx: CanvasRenderingContext2D): void {
+		ctx.fillStyle = this.background;
+		ctx.fillRect(0, 0, this.width, this.height);
 		for (let o of this._objects) {
 			o.draw(ctx);
 		}

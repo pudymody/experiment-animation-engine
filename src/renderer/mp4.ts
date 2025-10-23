@@ -9,13 +9,21 @@ import {
 
 import type { Scene } from '../engine/core/scene';
 
-export default class MP4Renderer {
+export interface ProgressEvent {
+	current: number
+	total: number
+	percentage: number
+}
+
+export default class MP4Renderer extends EventTarget {
 	private scene: Scene;
 	private fps: number = 60;
 	private canvas: OffscreenCanvas;
 	private ctx: OffscreenCanvasRenderingContext2D;
 
 	constructor(scene: Scene) {
+		super();
+
 		this.scene = scene;
 		this.canvas = new OffscreenCanvas(scene.width, scene.height)
 
@@ -59,7 +67,25 @@ export default class MP4Renderer {
 
 			await canvasSource.add(timestampInSeconds, durationInSeconds);
 			framesAdded++;
+
+			const event = new CustomEvent("progress", {
+				detail: {
+					current: i,
+					total: this.scene.endTime,
+					percentage: i / this.scene.endTime * 100
+				}
+			});
+			this.dispatchEvent(event);
 		}
+
+		const event = new CustomEvent("progress", {
+			detail: {
+				current: this.scene.endTime,
+				total: this.scene.endTime,
+				percentage: 100
+			}
+		});
+		this.dispatchEvent(event);
 
 		canvasSource.close();
 		await output.finalize(); // Resolves once the output is finalized

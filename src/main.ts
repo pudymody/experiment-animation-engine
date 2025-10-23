@@ -2,6 +2,7 @@ import { javascript } from "@codemirror/lang-javascript"
 import { EditorView, basicSetup } from "codemirror"
 import DOMCanvas from "./renderer/domcanvas";
 import MP4Renderer from "./renderer/mp4";
+import type { ProgressEvent } from "./renderer/mp4"
 
 customElements.define("canvas-player", DOMCanvas);
 
@@ -20,12 +21,18 @@ if ($exporter === null) {
 	throw new Error("could not get export button");
 }
 
+const $progress = document.querySelector("#progress");
+if ($progress === null) {
+	throw new Error("could not get progress container");
+}
+
 let videoURL: string;
 $exporter.addEventListener("click", function(_) {
 	if (url === undefined) {
 		return;
 	}
 
+	$progress.innerHTML = "";
 	import(url)
 		.then(({ default: scene }) => scene)
 		.then(scene => {
@@ -35,6 +42,12 @@ $exporter.addEventListener("click", function(_) {
 
 			const src = new scene();
 			const renderer = new MP4Renderer(src);
+			renderer.addEventListener("progress", (e: CustomEventInit<ProgressEvent>) => {
+				if (e.detail === undefined) {
+					return;
+				}
+				$progress.innerHTML = `${e.detail.percentage.toFixed(2)}%`;
+			})
 			renderer.export().then(blob => {
 				if (videoURL !== undefined) {
 					window.URL.revokeObjectURL(videoURL);

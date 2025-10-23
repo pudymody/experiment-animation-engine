@@ -23,6 +23,7 @@
 				height: 100%;
 				display: flex;
 				align-items: center;
+				gap: 1rem;
 			}
 
 			#toolbar button {
@@ -32,6 +33,12 @@
 				color: white;
 				border-radius: 0.25rem;
 				cursor: pointer;
+			}
+
+			#progress {
+				color: white;
+				font-variant: tabular-nums;
+				font-variant-numeric: tabular-nums;
 			}
 
 			#editor {
@@ -52,6 +59,7 @@
   <body>
 		<div id="toolbar">
 			<button id="export">Export</button>
+			<div id="progress"></div>
 		</div>
 		<div id="editor"></div>
 		<canvas-player></canvas-player>

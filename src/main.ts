@@ -80,12 +80,19 @@ function updatePreview() {
 const view = new EditorView({
 	doc: `import { chain, group, DefaultScene, Colors, Easing } from "${window.location}engine.js";
 
+// TODO:
+// 	- Rectangle
+// 	- Polygon
+// 	- Line
+// 	- Text?
+// 	- Latex?
+// 	- Code?
 export default class extends DefaultScene {
 	constructor() {
 		super();
 
-		this.width = 800;
-		this.height = 600;
+		this.width = 1920;
+		this.height = 1080;
 
 		const circleRadius = 10;
 		const c = this.Circle({

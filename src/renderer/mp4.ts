@@ -3,7 +3,7 @@ import {
 	Mp4OutputFormat,
 	BufferTarget,
 	CanvasSource,
-	QUALITY_HIGH,
+	QUALITY_VERY_HIGH,
 	getFirstEncodableVideoCodec
 } from 'mediabunny';
 
@@ -50,7 +50,7 @@ export default class MP4Renderer extends EventTarget {
 		}
 		const canvasSource = new CanvasSource(this.canvas, {
 			codec: videoCodec,
-			bitrate: QUALITY_HIGH,
+			bitrate: QUALITY_VERY_HIGH,
 		});
 		output.addVideoTrack(canvasSource, {
 			frameRate: this.fps,

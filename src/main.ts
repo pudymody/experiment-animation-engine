@@ -78,13 +78,12 @@ function updatePreview() {
 }
 
 const view = new EditorView({
-	doc: `import { chain, group, DefaultScene, Colors, Easing } from "${window.location}engine.js";
+	doc: `import { DefaultScene, Colors, Easing } from "${window.location}engine.js";
 
 // TODO:
-// 	- Wait helper
+// 	- Rectangle and polygon drawable animation
 // 	- Image
 // 	- Typescript types for editor autocomplete
-// 	- Rectangle and polygon drawable animation
 // 	- Text?
 // 	- Latex?
 // 	- Code?
@@ -95,10 +94,10 @@ export default class extends DefaultScene {
 		this.width = 1920;
 		this.height = 1080;
 		this.background = Colors.BLUE;
-		this._endTime = this.setup();
+		this.setup();
 	}
 
-	setup(){
+	setup() {
 		const circleRadius = 10;
 		const c = this.Circle({
 			x: this.width / 2 - circleRadius,
@@ -131,50 +130,51 @@ export default class extends DefaultScene {
 			strokeWidth: 0
 		});
 
-		return chain([
-			c.arc.to({
-				to: Math.PI * 2,
-				duration: 750,
-				ease: Easing.easeOutQuad,
+		this.play(c.arc.to({
+			to: Math.PI * 2,
+			duration: 750,
+			ease: Easing.easeOutQuad,
+		}));
+
+		this.play([
+			c.background.to({
+				to: Colors.RED,
+				ease: Easing.easeInQuad,
+				duration: 500,
 			}),
-			new group([
-				c.background.to({
-					to: Colors.RED,
-					ease: Easing.easeInQuad,
-					duration: 500,
-				}),
-				c.stroke.to({
-					to: Colors.RED,
-					ease: Easing.easeInQuad,
-					duration: 500,
-				}),
-			]),
-
-			c.radius.to({
-				to: 2203,
-				duration: 1000,
-				ease: Easing.easeInExpo
-			}),
-
-			new group([
-				r.width.to({
-					to: this.width,
-					duration: 750,
-					ease: Easing.easeOutQuad,
-				}),
-				r.height.to({
-					to: this.height,
-					duration: 750,
-					ease: Easing.easeOutQuad,
-				})
-			]),
-
-			p.background.to({
-				to: Colors.GREEN,
+			c.stroke.to({
+				to: Colors.RED,
 				ease: Easing.easeInQuad,
 				duration: 500,
 			})
+		])
+
+		this.wait(5000);
+
+		this.play(c.radius.to({
+			to: 2203,
+			duration: 1000,
+			ease: Easing.easeInExpo
+		}))
+
+		this.play([
+			r.width.to({
+				to: this.width,
+				duration: 750,
+				ease: Easing.easeOutQuad,
+			}),
+			r.height.to({
+				to: this.height,
+				duration: 750,
+				ease: Easing.easeOutQuad,
+			})
 		]);
+
+		this.play(p.background.to({
+			to: Colors.GREEN,
+			ease: Easing.easeInQuad,
+			duration: 500,
+		}));
 	}
 }`,
 	parent: $editor,

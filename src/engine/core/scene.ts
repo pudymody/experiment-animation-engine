@@ -1,3 +1,5 @@
+import type { Keyframe } from "../core/animation"
+
 import type { CircleProps } from "../shapes/circle"
 import Circle from "../shapes/circle";
 
@@ -63,6 +65,37 @@ export class DefaultScene {
 		for (let o of this._objects) {
 			o.draw(ctx);
 		}
+	}
+
+	wait(ms: number) {
+		this._endTime += ms;
+	}
+
+	play(frame: Pick<Keyframe<any>, "at" | "endTime">[]): void
+	play(frame: any): void {
+		if (Array.isArray(frame)) {
+			this._group(frame);
+			return;
+		}
+
+		if ("at" in frame && "endTime" in frame) {
+			this._chain(frame);
+			return;
+		}
+	}
+
+	_group(frames: Pick<Keyframe<any>, "at" | "endTime">[]): void {
+		const offset = this._endTime;
+		frames.forEach(f => {
+			f.at = offset;
+		})
+
+		this._endTime = Math.max(...frames.map(f => f.endTime));
+	}
+
+	_chain(frame: Pick<Keyframe<any>, "at" | "endTime">): void {
+		frame.at = this._endTime;
+		this._endTime = frame.endTime;
 	}
 
 	Circle(opts: CircleProps): Circle {

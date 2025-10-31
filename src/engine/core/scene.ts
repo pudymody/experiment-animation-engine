@@ -1,6 +1,14 @@
 import type { CircleProps } from "../shapes/circle"
 import Circle from "../shapes/circle";
 
+import Point from "../shapes/point";
+
+import type { PolygonProps } from "../shapes/polygon"
+import Polygon from "../shapes/polygon";
+
+import type { RectangleProps } from "../shapes/rectangle"
+import Rectangle from "../shapes/rectangle";
+
 export interface DrawingContext extends CanvasRect, CanvasPath, CanvasDrawPath, CanvasPathDrawingStyles, CanvasFillStrokeStyles { };
 
 interface Object {
@@ -61,5 +69,21 @@ export class DefaultScene {
 		let c = new Circle(opts);
 		this.add(c);
 		return c;
+	}
+
+	Polygon(opts: PolygonProps): Polygon {
+		let c = new Polygon(opts);
+		this.add(c);
+		return c;
+	}
+
+	Rectangle(opts: RectangleProps): Rectangle {
+		let c = new Rectangle(opts);
+		this.add(c);
+		return c;
+	}
+
+	Point(x: number, y: number): Point {
+		return new Point(x, y);
 	}
 }

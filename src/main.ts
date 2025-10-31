@@ -81,9 +81,10 @@ const view = new EditorView({
 	doc: `import { chain, group, DefaultScene, Colors, Easing } from "${window.location}engine.js";
 
 // TODO:
-// 	- Rectangle
-// 	- Polygon
-// 	- Line
+// 	- Wait helper
+// 	- Image
+// 	- Typescript types for editor autocomplete
+// 	- Rectangle and polygon drawable animation
 // 	- Text?
 // 	- Latex?
 // 	- Code?
@@ -93,7 +94,11 @@ export default class extends DefaultScene {
 
 		this.width = 1920;
 		this.height = 1080;
+		this.background = Colors.BLUE;
+		this._endTime = this.setup();
+	}
 
+	setup(){
 		const circleRadius = 10;
 		const c = this.Circle({
 			x: this.width / 2 - circleRadius,
@@ -105,7 +110,28 @@ export default class extends DefaultScene {
 			arc: 0,
 		});
 
-		this._endTime = chain([
+		const r = this.Rectangle({
+			x: 0,
+			y: 0,
+			width: 0,
+			height: 0,
+			background: Colors.WHITE,
+			stroke: Colors.TRANSPARENT,
+			strokeWidth: 0
+		});
+
+		const p = this.Polygon({
+			points: [
+				this.Point(800, 800),
+				this.Point(1000, 1000),
+				this.Point(600, 1000)
+			],
+			background: Colors.TRANSPARENT,
+			stroke: Colors.TRANSPARENT,
+			strokeWidth: 0
+		});
+
+		return chain([
 			c.arc.to({
 				to: Math.PI * 2,
 				duration: 750,
@@ -125,9 +151,28 @@ export default class extends DefaultScene {
 			]),
 
 			c.radius.to({
-				to: 1000,
+				to: 2203,
 				duration: 1000,
 				ease: Easing.easeInExpo
+			}),
+
+			new group([
+				r.width.to({
+					to: this.width,
+					duration: 750,
+					ease: Easing.easeOutQuad,
+				}),
+				r.height.to({
+					to: this.height,
+					duration: 750,
+					ease: Easing.easeOutQuad,
+				})
+			]),
+
+			p.background.to({
+				to: Colors.GREEN,
+				ease: Easing.easeInQuad,
+				duration: 500,
 			})
 		]);
 	}

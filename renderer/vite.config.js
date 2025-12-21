@@ -9,13 +9,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 export default defineConfig({
   build: {
     lib: {
-      entry: {
-				engine: resolve(__dirname, 'src/engine/index.ts'),
-				index: resolve(__dirname, 'index.html'),
-			},
-      name: 'engine',
+      entry: "index.ts",
+      name: 'renderer',
       // the proper extensions will be added
-      fileName: 'engine',
+      fileName: 'renderer',
 			formats: ["es"]
     },
   },

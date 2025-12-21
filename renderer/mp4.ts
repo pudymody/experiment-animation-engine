@@ -7,13 +7,7 @@ import {
 	getFirstEncodableVideoCodec
 } from 'mediabunny';
 
-import type { Scene } from '../engine/core/scene';
-
-export interface ProgressEvent {
-	current: number
-	total: number
-	percentage: number
-}
+import type { Scene } from 'engine';
 
 export default class MP4Renderer extends EventTarget {
 	private scene: Scene;

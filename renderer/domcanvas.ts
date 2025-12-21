@@ -1,4 +1,4 @@
-import type { Scene } from "../engine/core/scene";
+import type { Scene } from "engine";
 
 export default class DOMCanvas extends HTMLElement {
 	private $canvas: HTMLCanvasElement = document.createElement("canvas");

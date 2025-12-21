@@ -1,5 +1,5 @@
 {
-  "name": "experiment-animation-engine-js",
+  "name": "renderer",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -13,7 +13,7 @@
     "vite": "^7.1.7"
   },
   "dependencies": {
-    "mediabunny": "^1.24.2",
-    "monaco-editor": "^0.54.0"
+    "engine": "file:../engine",
+    "mediabunny": "^1.24.2"
   }
 }

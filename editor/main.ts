@@ -1,7 +1,32 @@
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.main.js';
-import DOMCanvas from "./renderer/domcanvas";
-import MP4Renderer from "./renderer/mp4";
-import type { ProgressEvent } from "./renderer/mp4"
+import { DOMCanvas, MP4Renderer } from "renderer";
+import type { ProgressEvent } from "renderer"
+
+import * as monaco from 'monaco-editor';
+import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
+import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
+import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
+import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
+import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
+
+
+// @ts-ignore
+self.MonacoEnvironment = {
+	getWorker(_: any, label: string) {
+		if (label === 'json') {
+			return new jsonWorker();
+		}
+		if (label === 'css' || label === 'scss' || label === 'less') {
+			return new cssWorker();
+		}
+		if (label === 'html' || label === 'handlebars' || label === 'razor') {
+			return new htmlWorker();
+		}
+		if (label === 'typescript' || label === 'javascript') {
+			return new tsWorker();
+		}
+		return new editorWorker();
+	}
+};
 
 customElements.define("canvas-player", DOMCanvas);
 
@@ -63,7 +88,7 @@ function updatePreview() {
 		return;
 	}
 
-	const value = view.state.doc.toString();
+	const value = monacoEditor.getValue();
 	if (value.length === 0) {
 		return;
 	}
@@ -77,8 +102,9 @@ function updatePreview() {
 }
 
 
-const myEditor = monaco.editor.create($editor, {
-	value: `import { DefaultScene, Colors, Easing } from "${window.location}engine.js";
+const EngineURL = `/engine.js`
+const monacoEditor = monaco.editor.create($editor, {
+	value: `import { DefaultScene, Colors, Easing } from "${EngineURL}";
 
 // TODO:
 // 	- Rectangle and polygon drawable animation
@@ -180,6 +206,11 @@ export default class extends DefaultScene {
 }`,
 	language: "javascript",
 	automaticLayout: true,
+	minimap: {
+		enabled: false
+	},
+	scrollBeyondLastLine: false
 });
 
+monacoEditor.onDidBlurEditorWidget(updatePreview);
 updatePreview();

@@ -1,0 +1,14 @@
+{
+  "name": "experiment-animation-engine-js",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "workspaces": [
+    "engine",
+    "renderer",
+    "editor"
+  ],
+  "devDependencies": {
+    "vite-plugin-module-alias": "^1.3.5"
+  }
+}

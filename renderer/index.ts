@@ -1,7 +1,6 @@
 import DOMCanvas from "./domcanvas.ts"
-import MP4Renderer from "./mp4.ts"
 
-export { DOMCanvas, MP4Renderer }
+export { DOMCanvas }
 export interface ProgressEvent {
 	current: number
 	total: number

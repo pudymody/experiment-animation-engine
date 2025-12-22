@@ -61,5 +61,7 @@ export default class Circle {
 			ctx.lineWidth = this.strokeWidth.value;
 			ctx.stroke();
 		}
+
+		ctx.closePath();
 	}
 }

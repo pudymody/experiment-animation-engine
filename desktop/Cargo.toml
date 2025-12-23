@@ -1,0 +1,13 @@
+[package]
+name = "desktop"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rquickjs = { version="0.10.0", features = ["macro", "loader"]}
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+panic = "abort"
+strip = "debuginfo"

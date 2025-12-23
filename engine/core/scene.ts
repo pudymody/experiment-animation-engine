@@ -60,7 +60,7 @@ export class DefaultScene {
 	}
 
 	draw(ctx: DrawingContext): void {
-		ctx.fillStyle = this.background;
+		ctx.fillStyle = this.background.toString();
 		ctx.fillRect(0, 0, this.width, this.height);
 		for (let o of this._objects) {
 			o.draw(ctx);

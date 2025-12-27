@@ -4,7 +4,6 @@ import { DefaultScene, Colors, Easing } from "engine";
 // 	- Rectangle and polygon drawable animation
 // 	- Rotate/Scale?
 // 	- Image
-// 	- Typescript types for editor autocomplete
 // 	- Text?
 // 	- Latex?
 // 	- Code?

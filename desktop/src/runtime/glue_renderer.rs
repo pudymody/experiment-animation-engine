@@ -10,8 +10,8 @@ pub(super) struct GlueRenderer<'js> {
 
 #[derive(Debug, Clone, rquickjs::class::Trace)]
 pub enum Action {
-    FillStyle(String),
-    StrokeStyle(String),
+    FillStyle(u8, u8, u8, u8),
+    StrokeStyle(u8, u8, u8, u8),
     LineWidth(f64),
     FillRect {
         x: f64,
@@ -61,11 +61,19 @@ impl<'js> GlueRenderer<'js> {
     #[qjs(set, rename = "fillStyle")]
     pub fn set_fill_style(&mut self, val: rquickjs::String<'js>) {
         self.fill_style = val;
+
+        let rust_string: &String = &self
+            .fill_style
+            .to_string()
+            .unwrap_or("rgba(255,255,255,255)".to_string());
+
+        let parsed = csscolorparser::parse(rust_string)
+            .map(|c| c.to_rgba8())
+            .unwrap_or([255, 255, 255, 255]);
+
         self.actions.push(Action::FillStyle(
-            self.fill_style
-                .to_string()
-                .expect("Could not convert js string for fillStyle into rust string"),
-        ))
+            parsed[0], parsed[1], parsed[2], parsed[3],
+        ));
     }
 
     #[qjs(get, rename = "strokeStyle")]
@@ -76,11 +84,19 @@ impl<'js> GlueRenderer<'js> {
     #[qjs(set, rename = "strokeStyle")]
     pub fn set_stroke_style(&mut self, val: rquickjs::String<'js>) {
         self.stroke_style = val;
+
+        let rust_string: &String = &self
+            .stroke_style
+            .to_string()
+            .unwrap_or("rgba(0,0,0,255)".to_string());
+
+        let parsed = csscolorparser::parse(rust_string)
+            .map(|c| c.to_rgba8())
+            .unwrap_or([255, 255, 255, 255]);
+
         self.actions.push(Action::StrokeStyle(
-            self.stroke_style
-                .to_string()
-                .expect("Could not convert js string for fillStyle into rust string"),
-        ))
+            parsed[0], parsed[1], parsed[2], parsed[3],
+        ));
     }
 
     #[qjs(get, rename = "lineWidth")]

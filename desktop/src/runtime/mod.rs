@@ -33,6 +33,8 @@ pub struct Runtime {
     ctx: rquickjs::Context,
     current_time: f64,
     end_time: f64,
+    width: f64,
+    height: f64,
     fps: f64,
 }
 
@@ -111,16 +113,30 @@ impl Runtime {
         })?;
 
         let mut end_time: f64 = 0.0;
+        let mut width: f64 = 0.0;
+        let mut height: f64 = 0.0;
         ctx.with(|ctx| -> Result<(), String> {
             let globals = ctx.globals();
             let scene: rquickjs::Object = globals
                 .get("__scene")
                 .catch(&ctx)
                 .map_err(caught_error_to_string)?;
+
             end_time = scene
                 .get("endTime")
                 .catch(&ctx)
                 .map_err(caught_error_to_string)?;
+
+            width = scene
+                .get("width")
+                .catch(&ctx)
+                .map_err(caught_error_to_string)?;
+
+            height = scene
+                .get("height")
+                .catch(&ctx)
+                .map_err(caught_error_to_string)?;
+
             return Ok(());
         })?;
 
@@ -128,12 +144,26 @@ impl Runtime {
             ctx: ctx,
             current_time: 0.0,
             end_time: end_time,
+            width: width,
+            height: height,
             fps: 0.0,
         });
     }
 
     pub fn set_fps(&mut self, fps: f64) {
         self.fps = fps;
+    }
+
+    pub fn get_fps(&self) -> f64 {
+        return self.fps;
+    }
+
+    pub fn width(&self) -> f64 {
+        return self.width;
+    }
+
+    pub fn height(&self) -> f64 {
+        return self.height;
     }
 
     pub fn current_time(&self) -> f64 {

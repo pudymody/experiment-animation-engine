@@ -1,5 +1,31 @@
 import { DefaultScene, Colors, Easing } from "engine";
 
+// https://developer.mozilla.org/en-US/play?uuid=6be7ec759ec06e8f8d2a1bec081004382edb9eee&state=dVFLT8MwDP4rUU5Bqtq1Q6Cxx2EDJG5IcMylSkxblDpTY8omxH%2FHUSqG0HbKl%2B%2FhxPaXbKl38k6uTI1jHURn11omrOVmVSS40SgzaUJgJ4P3eBqPgcQUWwvrzUcPSHkD9OAgwu3xyapTtaulxilEB04kPvp3HgkOxN7KJp%2FGohC7AWoCsa%2Bp1eiAxABN55GjCJ%2FimenqXkV34vPej%2FDq1XyWicXsD%2B86jHxZslCdEaprFsr5GeXmklAuLtW6%2Ff%2B6cT5A%2FKz6beyxc25qi0eRv%2FH1hY4OuDMtmwEAtVyeNJUqZSzCCOjtNCTeBLU8aV6G65qW5PcP&srcPrefix=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FCanvasRenderingContext2D%2Ffill%2F
+export default class Scene {
+	constructor(){
+		this.width = 1920;
+		this.height = 1080;
+		this.background = Colors.WHITE;
+
+		this.endTime = 5000;
+	}
+
+	update(time){}
+	draw(ctx){
+		ctx.beginPath()
+		ctx.moveTo(30, 90);
+		ctx.lineTo(110, 20);
+		ctx.lineTo(240, 130);
+		ctx.lineTo(60, 130);
+		ctx.lineTo(190, 20);
+		ctx.lineTo(270, 90);
+		ctx.closePath();
+
+		// Fill path
+		ctx.fillStyle = "green";
+		ctx.fill();
+	}
+}
 // TODO:
 // 	- Rectangle and polygon drawable animation
 // 	- Rotate/Scale?
@@ -7,7 +33,7 @@ import { DefaultScene, Colors, Easing } from "engine";
 // 	- Text?
 // 	- Latex?
 // 	- Code?
-export default class extends DefaultScene {
+export class Pepito extends DefaultScene {
 	constructor() {
 		super();
 
@@ -39,8 +65,8 @@ export default class extends DefaultScene {
 			width: 0,
 			height: 0,
 			background: Colors.WHITE,
-			stroke: Colors.TRANSPARENT,
-			strokeWidth: 0
+			stroke: Colors.BLACK,
+			strokeWidth: 5
 		});
 
 		const p = this.Polygon({
@@ -50,7 +76,7 @@ export default class extends DefaultScene {
 				this.Point(600, 1000)
 			],
 			background: Colors.TRANSPARENT,
-			stroke: Colors.TRANSPARENT,
+			stroke: Colors.BLACK,
 			strokeWidth: 0
 		});
 

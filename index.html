@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+	<style>
+		body {
+			display: grid;
+			height: 100svh;
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			background: #555;
+		}
+	</style>
+	<script type="importmap">
+		{
+			"imports": {
+				"engine": "/engine/index.js"
+			}
+		}
+	</script>
+  <script type="module">
+		import CanvasRenderer from "./renderer/domcanvas.js"
+		customElements.define("renderer-canvas", CanvasRenderer);
+
+		const $canvas = document.createElement("renderer-canvas");
+		$canvas.src = "/scene.example.js";
+		document.body.appendChild($canvas);
+	</script>
+</body>
+</html>

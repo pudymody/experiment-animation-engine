@@ -1,19 +1,4 @@
 /** @import { Scene } from 'engine' */
-
-const playButton = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
-</svg>`;
-const pauseButton = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
-</svg>`;
-const stopButton = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 7.5A2.25 2.25 0 0 1 7.5 5.25h9a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25h-9a2.25 2.25 0 0 1-2.25-2.25v-9Z" />
-</svg>`
-const exportButton = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-</svg>`
-
-
 /** @extends HTMLElement */
 export default class DOMCanvas extends HTMLElement {
     /**
@@ -21,11 +6,6 @@ export default class DOMCanvas extends HTMLElement {
      * @default HTMLCanvasElement
      */
     $canvas = document.createElement("canvas");
-    /**
-     * @private
-     * @default HTMLInputElement
-     */
-    $range = document.createElement("input");
     /**
      * @private
      */
@@ -39,10 +19,6 @@ export default class DOMCanvas extends HTMLElement {
      * @private
      */
     $shadowRoot;
-    /**
-     * @private
-     */
-    $playButton;
     /**
      * @private
      */
@@ -97,56 +73,8 @@ export default class DOMCanvas extends HTMLElement {
 				max-height: 100%;
 				overflow: auto;
 			}
-
-			div {
-				display: flex;
-				box-sizing: border-box;
-				gap: 0.5rem;
-				padding: 0.5rem;
-				background: #2a2b2b;
-				width: 100%;
-			}
-
-			input {
-				margin: 0;
-				flex: 1;
-			}
-
-			button {
-				all: unset;
-				display: block;
-			}
-
-			svg {
-				width: 1.75rem;
-				color: white;
-				cursor: pointer;
-				display: block;
-			}
 		`;
-        const $playButton = document.createElement("button");
-        $playButton.innerHTML = playButton;
-        $playButton.addEventListener("click", () => this.toggle());
-				this.$playButton = $playButton;
-        const $stopButton = document.createElement("button");
-        $stopButton.innerHTML = stopButton;
-        $stopButton.addEventListener("click", () => this.reset());
-        this.$range.type = "range";
-        this.$range.min = "0";
-        this.$range.max = "0";
-        this.$range.addEventListener("input", (e) => {
-            this.playTime = e.target.valueAsNumber;
-        });
-				const $exportButton = document.createElement("button");
-        $exportButton.innerHTML = exportButton;
-        $exportButton.addEventListener("click", () => this.export());
-        const $div = document.createElement("div");
-        $div.appendChild($style);
-        $div.appendChild($playButton);
-        $div.appendChild($stopButton);
-        $div.appendChild(this.$range);
-        $div.appendChild($exportButton);
-        this.$shadowRoot.appendChild($div);
+        this.$shadowRoot.appendChild($style);
         this.$shadowRoot.appendChild(this.$canvas);
     }
     /**
@@ -182,8 +110,10 @@ export default class DOMCanvas extends HTMLElement {
             this.$canvas.width = src.width;
             this.$canvas.height = src.height;
             this._src = src;
-            this.$range.max = src.endTime.toString();
             this.reset();
+
+            const loadEvent = new CustomEvent("load", { detail: { width: src.width, height: src.height, end: src.endTime } });
+            this.dispatchEvent(loadEvent);
         });
     }
     /**
@@ -194,8 +124,9 @@ export default class DOMCanvas extends HTMLElement {
             return;
         }
         this._isPlaying = true;
-				this.$playButton.innerHTML = pauseButton;
         window.requestAnimationFrame(this.newFrame);
+				const statusEvent = new CustomEvent("status", { detail: { playing: this._isPlaying } });
+				this.dispatchEvent(statusEvent);
     }
     /**
      * @returns {boolean}
@@ -212,7 +143,8 @@ export default class DOMCanvas extends HTMLElement {
         }
         this._isPlaying = false;
         this.start = undefined;
-				this.$playButton.innerHTML = playButton;
+				const statusEvent = new CustomEvent("status", { detail: { playing: this._isPlaying } });
+				this.dispatchEvent(statusEvent);
     }
     /**
      * @returns {void}
@@ -221,7 +153,8 @@ export default class DOMCanvas extends HTMLElement {
         this._isPlaying = false;
         this.start = undefined;
         this.playTime = 0;
-				this.$playButton.innerHTML = playButton;
+				const statusEvent = new CustomEvent("status", { detail: { playing: this._isPlaying } });
+				this.dispatchEvent(statusEvent);
     }
     /**
      * @param {number} value
@@ -234,7 +167,6 @@ export default class DOMCanvas extends HTMLElement {
             this._src.draw(this.ctx);
             const currentTimeEvent = new CustomEvent("currentTime", { detail: value });
             this.dispatchEvent(currentTimeEvent);
-            this.$range.valueAsNumber = value;
         }
     }
     /**

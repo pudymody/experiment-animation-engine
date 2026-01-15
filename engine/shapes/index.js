@@ -6,3 +6,5 @@ import Point from "./point.js";
 export { Point };
 import Rectangle from "./rectangle.js";
 export { Rectangle };
+import Image from "./image.js";
+export { Image };

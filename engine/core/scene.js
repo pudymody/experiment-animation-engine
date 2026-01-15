@@ -4,6 +4,7 @@ import Circle from "../shapes/circle.js";
 import Point from "../shapes/point.js";
 import Polygon from "../shapes/polygon.js";
 import Rectangle from "../shapes/rectangle.js";
+import EngineImage from "../shapes/image.js";
 ;
 ;
 export class DefaultScene {
@@ -158,6 +159,33 @@ export class DefaultScene {
     Point(x, y) {
         return new Point(x, y);
     }
+
+    /**
+     * @param {ImageProps} opts
+     * @returns {Image}
+     */
+    async Image({ url, x,y, width, height }) {
+			const image = await imageBitmapFromURL(url);
+			const img = new EngineImage({
+				src: image,
+				x: x,
+				y: y,
+				width: width,
+				height: height,
+			});
+			this.add(img);
+			return img;
+    }
+}
+
+async function imageBitmapFromURL(url){
+	return new Promise(function(resolve,reject){
+		const image = new Image();
+		image.onload = function () {
+			createImageBitmap(image).then(resolve, reject);
+		};
+		image.src = url;
+	})
 }
 /**
  * @typedef {Object} DrawingContext

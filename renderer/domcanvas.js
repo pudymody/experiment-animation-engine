@@ -49,6 +49,8 @@ export default class DOMCanvas extends HTMLElement {
             throw new Error("could not get context from canvas");
         }
         this.ctx = ctx;
+				ctx.imageSmoothingQuality = "high";
+				ctx.imageSmoothingEnabled = false;
         this._buildUI();
     }
     /**
@@ -103,11 +105,15 @@ export default class DOMCanvas extends HTMLElement {
         this.$range.addEventListener("input", (e) => {
             this.playTime = e.target.valueAsNumber;
         });
+				const $exportButton = document.createElement("button");
+        $exportButton.innerHTML = "Export";
+        $exportButton.addEventListener("click", () => this.export());
         const $div = document.createElement("div");
         $div.appendChild($style);
         $div.appendChild($playButton);
         $div.appendChild($stopButton);
         $div.appendChild(this.$range);
+        $div.appendChild($exportButton);
         this.$shadowRoot.appendChild($div);
         this.$shadowRoot.appendChild(this.$canvas);
     }
@@ -134,11 +140,13 @@ export default class DOMCanvas extends HTMLElement {
     set src(src) {
         import(src)
             .then(({ default: scene }) => scene)
-            .then(scene => {
+            .then(async scene => {
             if (scene === undefined) {
                 throw new Error("Invalid scene, make sure you are exporting it as the default");
             }
             const src = new scene();
+						await src.setup();
+
             this.$canvas.width = src.width;
             this.$canvas.height = src.height;
             this._src = src;
@@ -213,4 +221,39 @@ export default class DOMCanvas extends HTMLElement {
         }
         window.requestAnimationFrame(this.newFrame);
     }
+    /**
+     * @returns {void}
+     */
+		async export(){
+			// hardcoded 60fps for now
+			const dt = 1/60 * 1000;
+			this.reset();
+
+			const dirHandle = await window.showDirectoryPicker({ "id": "exporter", "mode": "readwrite", "startIn": "downloads" });
+
+			const totalFrames = Math.ceil(this._src.endTime / dt);
+			const padSize = totalFrames.toString().length;
+
+			let currentFrame = 0;
+			while(this._playTime <= this._src.endTime){
+				const fileHandle = await dirHandle.getFileHandle(`${currentFrame.toString().padStart(padSize,0)}.png`, { "create": true })
+				const writable = await fileHandle.createWritable();
+
+				this.playTime = this._playTime + dt;
+
+				const data = await canvasBlobAsync(this.$canvas);
+				await writable.write(data);
+				await writable.close();
+
+				currentFrame++;
+			}
+		}
+}
+
+function canvasBlobAsync(canvas){
+	return new Promise(function(resolve,reject){
+		canvas.toBlob( blob => {
+			resolve(blob);
+		}, "image/png", 1)
+	});
 }

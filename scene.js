@@ -3,7 +3,6 @@ import { DefaultScene, Colors, Easing } from "engine";
 // TODO:
 // 	- Rectangle and polygon drawable animation
 // 	- Rotate/Scale?
-// 	- Image
 // 	- Text?
 // 	- Latex?
 // 	- Code?
@@ -14,10 +13,33 @@ export default class extends DefaultScene {
 		this.width = 1920;
 		this.height = 1080;
 		this.background = Colors.BLUE;
-		this.setup();
 	}
 
-	setup() {
+	async setup() {
+		const image = await this.Image({ url: "2.jpg", x: 20,y: 20, width: 1000, height: 429 });
+		this.play([
+			image.width.to({
+				to: 2000,
+				ease: Easing.easeInQuad,
+				duration: 500,
+			}),
+			image.height.to({
+				to: 859,
+				ease: Easing.easeInQuad,
+				duration: 500,
+			}),
+			image.x.to({
+				to: 0,
+				ease: Easing.easeInQuad,
+				duration: 500,
+			}),
+			image.y.to({
+				to: 0,
+				ease: Easing.easeInQuad,
+				duration: 500,
+			}),
+		])
+
 		const circleRadius = 10;
 		const c = this.Circle({
 			x: this.width / 2 - circleRadius,

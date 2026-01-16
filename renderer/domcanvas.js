@@ -31,6 +31,10 @@ export default class DOMCanvas extends HTMLElement {
     /**
      * @private
      */
+    _jsSrc;
+    /**
+     * @public
+     */
     _src;
     /**
      *
@@ -59,6 +63,7 @@ export default class DOMCanvas extends HTMLElement {
 				display: flex;
 				flex-direction: column;
 				align-items: center;
+				justify-content: center;
 				width: 100%;
 				height: 100%;
 				box-sizing: border-box;
@@ -88,12 +93,12 @@ export default class DOMCanvas extends HTMLElement {
             this.play();
         }
     }
-    /**
-     * @returns {any}
-     */
-    get src() {
-        return this._src;
-    }
+		/**
+		 * @returns {string}
+		 */
+		get src(){
+			return this._src;
+		}
     /**
      * @param {string} src
      */
@@ -104,15 +109,16 @@ export default class DOMCanvas extends HTMLElement {
             if (scene === undefined) {
                 throw new Error("Invalid scene, make sure you are exporting it as the default");
             }
-            const src = new scene();
-						await src.setup();
+            const jsSrc = new scene();
+						await jsSrc.setup();
 
-            this.$canvas.width = src.width;
-            this.$canvas.height = src.height;
-            this._src = src;
+            this.$canvas.width = jsSrc.width;
+            this.$canvas.height = jsSrc.height;
+            this._jsSrc = jsSrc;
+						this._src = src;
             this.reset();
 
-            const loadEvent = new CustomEvent("load", { detail: { width: src.width, height: src.height, end: src.endTime } });
+            const loadEvent = new CustomEvent("load", { detail: { width: jsSrc.width, height: jsSrc.height, end: jsSrc.endTime } });
             this.dispatchEvent(loadEvent);
         });
     }
@@ -162,13 +168,21 @@ export default class DOMCanvas extends HTMLElement {
     set playTime(value) {
         this.ctx.clearRect(0, 0, this.$canvas.width, this.$canvas.height);
         this._playTime = value;
-        if (this._src !== undefined) {
-            this._src.currentTime = value;
-            this._src.draw(this.ctx);
+        if (this._jsSrc !== undefined) {
+            this._jsSrc.currentTime = value;
+            this._jsSrc.draw(this.ctx);
             const currentTimeEvent = new CustomEvent("currentTime", { detail: value });
             this.dispatchEvent(currentTimeEvent);
         }
     }
+    /**
+     * @public
+     * @returns {number}
+     */
+		get playTime(){
+			return this._playTime;
+		}
+
     /**
      * @private
      * @param {number} time
@@ -182,8 +196,8 @@ export default class DOMCanvas extends HTMLElement {
             this.start = time - this._playTime;
         }
         this.playTime = time - this.start;
-        if (this._src !== undefined && this._playTime > this._src.endTime) {
-						this._playTime = this._src.endTime;
+        if (this._jsSrc !== undefined && this._playTime > this._jsSrc.endTime) {
+						this._playTime = this._jsSrc.endTime;
             this.pause();
             return;
         }

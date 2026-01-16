@@ -10,6 +10,7 @@
 		body {
 			display: grid;
 			grid-template-rows: auto 1fr;
+			grid-template-columns: 1fr 1fr;
 			height: 100svh;
 			margin: 0;
 			padding: 0;
@@ -18,6 +19,7 @@
 		}
 
 		nav {
+			grid-column: 1/-1;
 			display: flex;
 			box-sizing: border-box;
 			gap: 0.5rem;
@@ -57,9 +59,17 @@
 			padding: 0.5rem;
 			border-radius: 0.5rem;
 		}
+
+		.cm-editor {
+			background: white;
+			max-height: 100%;
+			overflow: auto;
+		}
 	</style>
 	<nav>
-		<button id="play">Play</button>
+		<button id="play">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" /></svg>
+		</button>
 		<button id="stop">
 			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 7.5A2.25 2.25 0 0 1 7.5 5.25h9a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25h-9a2.25 2.25 0 0 1-2.25-2.25v-9Z" /> </svg>
 		</button>
@@ -79,13 +89,162 @@
   <script type="module">
 		import VideoRenderer from "./renderer/video.js";
 		import CanvasRenderer from "./renderer/domcanvas.js"
+
+		import {javascript} from "https://esm.sh/@codemirror/lang-javascript"
+		import {EditorView, basicSetup} from "https://esm.sh/codemirror"
+
+		let lastPlaytime = 0;
+		function playContent(content){
+			if( $canvas.src != "" ){
+				lastPlaytime = $canvas.playTime;
+				window.URL.revokeObjectURL($canvas.src);
+			}
+			const myBlob = new Blob([content], { type: 'text/javascript' });
+			$canvas.src = window.URL.createObjectURL(myBlob);
+		}
+
+		const myExtension = EditorView.domEventHandlers({
+			blur: (event, view) => {
+				playContent(view.state.doc.toString());
+			}
+		});
+
+		const view = new EditorView({
+			doc: `import { DefaultScene, Colors, Easing } from "engine";
+
+// TODO:
+// 	- Rectangle and polygon drawable animation
+// 	- Rotate/Scale?
+// 	- Text?
+// 	- Latex?
+// 	- Code?
+export default class extends DefaultScene {
+	constructor() {
+		super();
+
+		this.width = 1920;
+		this.height = 1080;
+		this.background = Colors.BLUE;
+	}
+
+	async setup() {
+		const image = await this.Image({ url: "2.jpg", x: 20,y: 20, width: 1000, height: 429 });
+		this.play([
+			image.width.to({
+				to: 2000,
+				ease: Easing.easeInQuad,
+				duration: 500,
+			}),
+			image.height.to({
+				to: 859,
+				ease: Easing.easeInQuad,
+				duration: 500,
+			}),
+			image.x.to({
+				to: 0,
+				ease: Easing.easeInQuad,
+				duration: 500,
+			}),
+			image.y.to({
+				to: 0,
+				ease: Easing.easeInQuad,
+				duration: 500,
+			}),
+		])
+
+		const circleRadius = 10;
+		const c = this.Circle({
+			x: this.width / 2 - circleRadius,
+			y: this.height / 2 - circleRadius,
+			radius: circleRadius,
+			background: Colors.TRANSPARENT,
+			strokeWidth: 2,
+			stroke: Colors.BLACK,
+			arc: 0,
+		});
+
+		const r = this.Rectangle({
+			x: 0,
+			y: 0,
+			width: 0,
+			height: 0,
+			background: Colors.WHITE,
+			stroke: Colors.TRANSPARENT,
+			strokeWidth: 0
+		});
+
+		const p = this.Polygon({
+			points: [
+				this.Point(800, 800),
+				this.Point(1000, 1000),
+				this.Point(600, 1000)
+			],
+			background: Colors.TRANSPARENT,
+			stroke: Colors.TRANSPARENT,
+			strokeWidth: 0
+		});
+
+		this.play(c.arc.to({
+			to: Math.PI * 2,
+			duration: 750,
+			ease: Easing.easeOutQuad,
+		}));
+
+		this.play([
+			c.background.to({
+				to: Colors.RED,
+				ease: Easing.easeInQuad,
+				duration: 500,
+			}),
+			c.stroke.to({
+				to: Colors.RED,
+				ease: Easing.easeInQuad,
+				duration: 500,
+			})
+		])
+
+		this.wait(5000);
+
+		this.play(c.radius.to({
+			to: 2203,
+			duration: 1000,
+			ease: Easing.easeInExpo
+		}))
+
+		this.play([
+			r.width.to({
+				to: this.width,
+				duration: 750,
+				ease: Easing.easeOutQuad,
+			}),
+			r.height.to({
+				to: this.height,
+				duration: 750,
+				ease: Easing.easeOutQuad,
+			})
+		]);
+
+		this.play(p.background.to({
+			to: Colors.GREEN,
+			ease: Easing.easeInQuad,
+			duration: 500,
+		}));
+	}
+}`,
+			parent: document.body,
+			extensions: [
+				basicSetup,
+				javascript({typescript: true}),
+				myExtension
+			]
+		})
+
 		customElements.define("renderer-canvas", CanvasRenderer);
 
 		// to allow nvim to not mess inodes we have to run
 		//:set nobackup nowritebackup
 
 		const $canvas = document.createElement("renderer-canvas");
-		$canvas.src = "/scene.js";
 		document.body.appendChild($canvas);
 
 		const $play = document.querySelector("#play");
@@ -116,7 +275,7 @@
 		const $export = document.querySelector("#export");
 		$export.addEventListener("click", async () => {
 			$export.disabled = true;
-			const videoBlob = await $videoRenderer.render("/scene.js");
+			const videoBlob = await $videoRenderer.render($canvas.src);
 			await saveFile(videoBlob);
 			$export.disabled = false;
 			$progress.innerText = "";
@@ -131,6 +290,7 @@
 		})
 		$canvas.addEventListener("load", (e) => {
 			$position.max = e.detail.end.toString();
+			$canvas.playTime = lastPlaytime;
 		})
 
 		// Feature detection. The API needs to be supported
@@ -185,6 +345,8 @@
 				}, 1000);
 			})
 		};
+
+		playContent(view.state.doc.toString());
 	</script>
 </body>
 </html>

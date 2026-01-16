@@ -5,6 +5,7 @@ import Point from "../shapes/point.js";
 import Polygon from "../shapes/polygon.js";
 import Rectangle from "../shapes/rectangle.js";
 import EngineImage from "../shapes/image.js";
+import Text from "../shapes/text.js";
 ;
 ;
 export class DefaultScene {
@@ -175,6 +176,16 @@ export class DefaultScene {
 			});
 			this.add(img);
 			return img;
+    }
+
+    /**
+     * @param {TextProps} opts
+     * @returns {Text}
+     */
+    Text(opts) {
+			let t = new Text(opts);
+			this.add(t);
+			return t;
     }
 }
 

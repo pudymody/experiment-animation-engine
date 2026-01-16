@@ -1,7 +1,6 @@
 import { DefaultScene, Colors, Easing } from "engine";
 
 // TODO:
-// 	- Text?
 // 	- Rectangle and polygon drawable animation
 // 	- Rotate/Scale?
 // 	- Latex?
@@ -140,5 +139,22 @@ export default class extends DefaultScene {
 			ease: Easing.easeInQuad,
 			duration: 500,
 		}))
+
+		const t = this.Text({ text: "Hola!", font: "monospace", size: 48, x: 1920 / 2, y: 1080 /2, align: "center", baseline: "middle", background: Colors.BLACK, stroke: Colors.TRANSPARENT });
+		this.wait(2000);
+		this.play([
+			t.size.to({
+			to: 200,
+			ease: Easing.easeInQuad,
+			duration: 500,
+		}),
+		t.opacity.to({
+			to: 0,
+			ease: Easing.easeInQuad,
+			duration: 250,
+			delay: 250,
+		})
+		])
+		this.wait(2000);
 	}
 }

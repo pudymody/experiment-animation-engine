@@ -3,7 +3,6 @@ import { DefaultScene, Colors, Easing } from "engine";
 // TODO:
 // 	- Text?
 //	- Opacity
-//	- Image aspect ratio property
 // 	- Rectangle and polygon drawable animation
 // 	- Rotate/Scale?
 // 	- Latex?

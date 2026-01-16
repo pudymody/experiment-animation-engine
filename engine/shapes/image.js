@@ -58,6 +58,18 @@ export default class Rectangle {
         this.sHeight = new TimelineNumber(opts.src.height);
 				this._src = opts.src;
     }
+		/**
+     * @returns {number}
+     */	
+		get aspectRatioWidth(){
+			return this._src.width/this._src.height;
+		}
+		/**
+     * @returns {number}
+     */	
+		get aspectRatioHeight(){
+			return this._src.height/this._src.width;
+		}
     /**
      * @param {number} time
      * @returns {void}

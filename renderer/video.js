@@ -7,7 +7,7 @@ import {
 	getFirstEncodableAudioCodec,
 	getFirstEncodableVideoCodec,
 	OutputFormat,
-} from 'https://esm.sh/mediabunny';
+} from 'mediabunny';
 
 export default class VideoRenderer extends EventTarget {
 	constructor(){

@@ -82,16 +82,21 @@
 	<script type="importmap">
 		{
 			"imports": {
-				"engine": "/engine/index.js"
+				"engine": "/engine/index.js",
+				"renderer/video": "/renderer/video.js",
+				"renderer/domcanvas": "/renderer/domcanvas.js",
+				"mediabunny": "https://esm.sh/mediabunny",
+				"@codemirror/lang-javascript": "https://esm.sh/@codemirror/lang-javascript",
+				"codemirror": "https://esm.sh/codemirror"
 			}
 		}
 	</script>
   <script type="module">
-		import VideoRenderer from "./renderer/video.js";
-		import CanvasRenderer from "./renderer/domcanvas.js"
+		import VideoRenderer from "renderer/video";
+		import CanvasRenderer from "renderer/domcanvas"
 
-		import {javascript} from "https://esm.sh/@codemirror/lang-javascript"
-		import {EditorView, basicSetup} from "https://esm.sh/codemirror"
+		import {javascript} from "@codemirror/lang-javascript"
+		import {EditorView, basicSetup} from "codemirror"
 
 		let lastPlaytime = 0;
 		function playContent(content){
@@ -113,7 +118,10 @@
 			doc: `import { DefaultScene, Colors, Easing } from "engine";
 
 // TODO:
+//	- Vertical/Horizontal/Full layout
+//	- Delay in timeline functions
 // 	- Rectangle and polygon drawable animation
+//	- Opacity
 // 	- Rotate/Scale?
 // 	- Text?
 // 	- Latex?

@@ -20,6 +20,10 @@ export class KeyframeNumber {
      */
     at;
     /**
+     * @public
+     */
+    delay;
+    /**
      * @private
      */
     ease;
@@ -31,6 +35,7 @@ export class KeyframeNumber {
         this.to = opts.to;
         this.duration = opts.duration || 0;
         this.at = opts.at || 0;
+        this.delay = opts.delay || 0;
         this.ease = opts.ease || linear;
     }
     /**
@@ -41,14 +46,14 @@ export class KeyframeNumber {
         if (this.duration == 0) {
             return this.to;
         }
-        const t = Clamp01((time - this.at) / this.duration);
+        const t = Clamp01((time - this.at - this.delay) / this.duration);
         return Lerp(this.from, this.to, this.ease(t));
     }
     /**
      * @returns {number}
      */
     get endTime() {
-        return this.at + this.duration;
+        return this.at + this.delay + this.duration;
     }
 }
 export class TimelineNumber {
@@ -70,6 +75,7 @@ export class TimelineNumber {
                 to: start,
                 duration: 0,
                 at: 0,
+								delay: 0,
                 ease: linear,
             })
         ];
@@ -94,6 +100,7 @@ export class TimelineNumber {
             to: to,
             duration: opts.duration,
             at: at,
+						delay: opts.delay,
             ease: opts.ease,
         });
         this._keyframes.push(newKeyframe);

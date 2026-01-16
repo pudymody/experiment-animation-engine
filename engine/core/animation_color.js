@@ -65,6 +65,10 @@ export class KeyframeColor {
      */
     at;
     /**
+     * @public
+     */
+    delay;
+    /**
      * @private
      */
     ease;
@@ -76,6 +80,7 @@ export class KeyframeColor {
         this.to = opts.to;
         this.duration = opts.duration || 0;
         this.at = opts.at || 0;
+        this.delay = opts.delay || 0;
         this.ease = opts.ease || linear;
     }
     /**
@@ -86,14 +91,14 @@ export class KeyframeColor {
         if (this.duration == 0) {
             return this.to;
         }
-        const t = Clamp01((time - this.at) / this.duration);
+        const t = Clamp01((time - this.at - this.delay) / this.duration);
         return new Color(Lerp(this.from.r, this.to.r, this.ease(t)), Lerp(this.from.g, this.to.g, this.ease(t)), Lerp(this.from.b, this.to.b, this.ease(t)), Lerp(this.from.a, this.to.a, this.ease(t)));
     }
     /**
      * @returns {number}
      */
     get endTime() {
-        return this.at + this.duration;
+        return this.at + this.delay + this.duration;
     }
 }
 export class TimelineColor {
@@ -115,6 +120,7 @@ export class TimelineColor {
                 to: start,
                 duration: 0,
                 at: 0,
+								delay: 0,
                 ease: linear,
             })
         ];
@@ -139,6 +145,7 @@ export class TimelineColor {
             to: to,
             duration: opts.duration,
             at: at,
+						delay: opts.delay,
             ease: opts.ease,
         });
         this._keyframes.push(newKeyframe);

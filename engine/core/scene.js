@@ -181,6 +181,7 @@ export class DefaultScene {
 async function imageBitmapFromURL(url){
 	return new Promise(function(resolve,reject){
 		const image = new Image();
+		image.crossOrigin = "anonymous";
 		image.onload = function () {
 			createImageBitmap(image).then(resolve, reject);
 		};

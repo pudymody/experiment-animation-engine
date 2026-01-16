@@ -9,6 +9,7 @@
 	<style>
 		body {
 			display: grid;
+			grid-template-rows: auto 1fr;
 			height: 100svh;
 			margin: 0;
 			padding: 0;
@@ -41,6 +42,21 @@
 				display: block;
 			}
 		}
+
+		#progress:empty {
+			display: none;
+		}
+		#progress {
+			display: block;
+			position: fixed;
+			background: green;
+			color: white;
+			right: 0.5rem;
+			top: 0.5rem;
+			font-size: 2rem;
+			padding: 0.5rem;
+			border-radius: 0.5rem;
+		}
 	</style>
 	<nav>
 		<button id="play">Play</button>
@@ -51,6 +67,7 @@
 		<button id="export">
 			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /> </svg>
 		</button>
+		<div id="progress"></div>
 	</nav>
 	<script type="importmap">
 		{
@@ -60,6 +77,7 @@
 		}
 	</script>
   <script type="module">
+		import VideoRenderer from "./renderer/video.js";
 		import CanvasRenderer from "./renderer/domcanvas.js"
 		customElements.define("renderer-canvas", CanvasRenderer);
 
@@ -90,9 +108,21 @@
 			$canvas.reset();
 		})
 
+		const $videoRenderer = new VideoRenderer;
+		$videoRenderer.addEventListener("progress", ({ detail }) => {
+			$progress.innerText = `${Math.floor(detail.current / detail.total * 100)}%`;
+		})
+		const $progress = document.querySelector("#progress");
 		const $export = document.querySelector("#export");
-		$export.addEventListener("click", () => {
-			$canvas.export();
+		$export.addEventListener("click", async () => {
+			$export.disabled = true;
+			const videoBlob = await $videoRenderer.render("/scene.js");
+			const fileHandle = await window.showSaveFilePicker({ "id": "exporter", "startIn": "downloads" });
+			const writable = await fileHandle.createWritable();	
+			await writable.write(videoBlob);
+			await writable.close();
+			$export.disabled = false;
+			$progress.innerText = "";
 		})
 
 		const $position = document.querySelector("#position");

@@ -183,44 +183,10 @@ export default class DOMCanvas extends HTMLElement {
         }
         this.playTime = time - this.start;
         if (this._src !== undefined && this._playTime > this._src.endTime) {
+						this._playTime = this._src.endTime;
             this.pause();
             return;
         }
         window.requestAnimationFrame(this.newFrame);
     }
-    /**
-     * @returns {void}
-     */
-		async export(){
-			// hardcoded 60fps for now
-			const dt = 1/60 * 1000;
-			this.reset();
-
-			const dirHandle = await window.showDirectoryPicker({ "id": "exporter", "mode": "readwrite", "startIn": "downloads" });
-
-			const totalFrames = Math.ceil(this._src.endTime / dt);
-			const padSize = totalFrames.toString().length;
-
-			let currentFrame = 0;
-			while(this._playTime <= this._src.endTime){
-				const fileHandle = await dirHandle.getFileHandle(`${currentFrame.toString().padStart(padSize,0)}.png`, { "create": true })
-				const writable = await fileHandle.createWritable();
-
-				this.playTime = this._playTime + dt;
-
-				const data = await canvasBlobAsync(this.$canvas);
-				await writable.write(data);
-				await writable.close();
-
-				currentFrame++;
-			}
-		}
-}
-
-function canvasBlobAsync(canvas){
-	return new Promise(function(resolve,reject){
-		canvas.toBlob( blob => {
-			resolve(blob);
-		}, "image/png", 1)
-	});
 }

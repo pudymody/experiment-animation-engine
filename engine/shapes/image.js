@@ -39,6 +39,10 @@ export default class Rectangle {
      */
     sHeight;
     /**
+     * @public
+     */
+    opacity;
+    /**
      * @param {ImageProps} opts
      */
     constructor(opts) {
@@ -48,6 +52,9 @@ export default class Rectangle {
 				if( opts.height === undefined ){
 					opts.height = opts.src.height;
 				}
+				if( opts.opacity === undefined ){
+					opts.opacity = 1;
+				}
         this.x = new TimelineNumber(opts.x);
         this.y = new TimelineNumber(opts.y);
         this.width = new TimelineNumber(opts.width);
@@ -56,6 +63,7 @@ export default class Rectangle {
         this.sy = new TimelineNumber(0);
         this.sWidth = new TimelineNumber(opts.src.width);
         this.sHeight = new TimelineNumber(opts.src.height);
+        this.opacity = new TimelineNumber(opts.opacity);
 				this._src = opts.src;
     }
 		/**
@@ -83,13 +91,19 @@ export default class Rectangle {
         this.sy.update(time);
         this.sWidth.update(time);
         this.sHeight.update(time);
+        this.opacity.update(time);
     }
     /**
      * @param {DrawingContext} ctx
      * @returns {void}
      */
     draw(ctx) {
+			const prevOpacity = ctx.globalAlpha;
+			ctx.globalAlpha = this.opacity.value;
+
 			ctx.drawImage(this._src, this.sx.value, this.sy.value, this.sWidth.value, this.sHeight.value, this.x.value, this.y.value, this.width.value, this.height.value);
+
+			ctx.globalAlpha = prevOpacity;
     }
 }
 /**

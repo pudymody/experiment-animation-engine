@@ -31,9 +31,16 @@ export default class Rectangle {
      */
     stroke;
     /**
+     * @private
+     */
+    opacity;
+    /**
      * @param {RectangleProps} opts
      */
     constructor(opts) {
+				if( opts.opacity === undefined ){
+					opts.opacity = 1;
+				}
         this.x = new TimelineNumber(opts.x);
         this.y = new TimelineNumber(opts.y);
         this.width = new TimelineNumber(opts.width);
@@ -41,6 +48,7 @@ export default class Rectangle {
         this.strokeWidth = new TimelineNumber(opts.strokeWidth);
         this.background = new TimelineColor(opts.background);
         this.stroke = new TimelineColor(opts.stroke);
+        this.opacity = new TimelineNumber(opts.opacity);
     }
     /**
      * @param {number} time
@@ -54,12 +62,16 @@ export default class Rectangle {
         this.strokeWidth.update(time);
         this.background.update(time);
         this.stroke.update(time);
+        this.opacity.update(time);
     }
     /**
      * @param {DrawingContext} ctx
      * @returns {void}
      */
     draw(ctx) {
+				const prevOpacity = ctx.globalAlpha;
+				ctx.globalAlpha = this.opacity.value;
+
         ctx.fillStyle = this.background.value.toString();
         ctx.strokeStyle = this.stroke.value.toString();
         ctx.beginPath();
@@ -73,6 +85,8 @@ export default class Rectangle {
             ctx.lineWidth = this.strokeWidth.value;
             ctx.stroke();
         }
+
+				ctx.globalAlpha = prevOpacity;
     }
 }
 /**

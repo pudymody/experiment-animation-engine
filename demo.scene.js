@@ -2,7 +2,6 @@ import { DefaultScene, Colors, Easing } from "engine";
 
 // TODO:
 // 	- Text?
-//	- Opacity
 // 	- Rectangle and polygon drawable animation
 // 	- Rotate/Scale?
 // 	- Latex?
@@ -120,5 +119,26 @@ export default class extends DefaultScene {
 			ease: Easing.easeInQuad,
 			duration: 500,
 		}));
+
+		this.play(p.opacity.to({
+			to: 0,
+			ease: Easing.easeInQuad,
+			duration: 500,
+		}))
+		this.play(r.opacity.to({
+			to: 0,
+			ease: Easing.easeInQuad,
+			duration: 500,
+		}))
+		this.play(c.opacity.to({
+			to: 0,
+			ease: Easing.easeInQuad,
+			duration: 500,
+		}))
+		this.play(image.opacity.to({
+			to: 0,
+			ease: Easing.easeInQuad,
+			duration: 500,
+		}))
 	}
 }

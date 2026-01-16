@@ -19,16 +19,24 @@ export default class Polygon {
      */
     stroke;
     /**
+     * @private
+     */
+    opacity;
+    /**
      * @param {PolygonProps} opts
      */
     constructor(opts) {
         if (opts.points === undefined || opts.points.length < 2) {
             throw new Error("Polygon constructor must have more than 2 points");
         }
+				if( opts.opacity === undefined ){
+					opts.opacity = 1;
+				}
         this.points = opts.points;
         this.strokeWidth = new TimelineNumber(opts.strokeWidth);
         this.background = new TimelineColor(opts.background);
         this.stroke = new TimelineColor(opts.stroke);
+        this.opacity = new TimelineNumber(opts.opacity);
     }
     /**
      * @param {number} time
@@ -41,12 +49,16 @@ export default class Polygon {
         this.strokeWidth.update(time);
         this.background.update(time);
         this.stroke.update(time);
+        this.opacity.update(time);
     }
     /**
      * @param {DrawingContext} ctx
      * @returns {void}
      */
     draw(ctx) {
+				const prevOpacity = ctx.globalAlpha;
+				ctx.globalAlpha = this.opacity.value;
+
         ctx.fillStyle = this.background.value.toString();
         ctx.strokeStyle = this.stroke.value.toString();
         ctx.beginPath();
@@ -61,6 +73,8 @@ export default class Polygon {
             ctx.lineWidth = this.strokeWidth.value;
             ctx.stroke();
         }
+
+				ctx.globalAlpha = prevOpacity;
     }
 }
 /**

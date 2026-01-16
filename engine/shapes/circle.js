@@ -31,6 +31,10 @@ export default class Circle {
      */
     stroke;
     /**
+     * @private
+     */
+    opacity;
+    /**
      * @param {CircleProps} opts
      */
     constructor(opts) {
@@ -42,6 +46,10 @@ export default class Circle {
             opts.arc = Math.PI * 2;
         }
         this.arc = new TimelineNumber(opts.arc);
+				if( opts.opacity === undefined ){
+					opts.opacity = 1;
+				}
+        this.opacity = new TimelineNumber(opts.opacity);
         this.background = new TimelineColor(opts.background);
         this.stroke = new TimelineColor(opts.stroke);
     }
@@ -57,12 +65,16 @@ export default class Circle {
         this.arc.update(time);
         this.background.update(time);
         this.stroke.update(time);
+        this.opacity.update(time);
     }
     /**
      * @param {DrawingContext} ctx
      * @returns {void}
      */
     draw(ctx) {
+				const prevOpacity = ctx.globalAlpha;
+				ctx.globalAlpha = this.opacity.value;
+
         ctx.beginPath();
         ctx.fillStyle = this.background.value.toString();
         ctx.strokeStyle = this.stroke.value.toString();
@@ -73,6 +85,8 @@ export default class Circle {
             ctx.stroke();
         }
         ctx.closePath();
+	
+				ctx.globalAlpha = prevOpacity;
     }
 }
 /**

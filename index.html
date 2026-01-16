@@ -117,10 +117,7 @@
 		$export.addEventListener("click", async () => {
 			$export.disabled = true;
 			const videoBlob = await $videoRenderer.render("/scene.js");
-			const fileHandle = await window.showSaveFilePicker({ "id": "exporter", "startIn": "downloads" });
-			const writable = await fileHandle.createWritable();	
-			await writable.write(videoBlob);
-			await writable.close();
+			await saveFile(videoBlob);
 			$export.disabled = false;
 			$progress.innerText = "";
 		})
@@ -135,6 +132,59 @@
 		$canvas.addEventListener("load", (e) => {
 			$position.max = e.detail.end.toString();
 		})
+
+		// Feature detection. The API needs to be supported
+		// and the app not run in an iframe.
+		const supportsFileSystemAccess =
+			'showSaveFilePicker' in window &&
+			(() => {
+				try {
+					return window.self === window.top;
+				} catch {
+					return false;
+				}
+			})();
+
+		const saveFile = async (blob) => {
+			return new Promise(async function(resolve,reject){
+				// If the File System Access API is supported…
+				if (supportsFileSystemAccess) {
+					try {
+						// Show the file save dialog.
+						const handle = await showSaveFilePicker({ "id": "exporter", "startIn": "downloads", suggestedName: "video.mp4" });
+						// Write the blob to the file.
+						const writable = await handle.createWritable();
+						await writable.write(blob);
+						await writable.close();
+						resolve();
+						return;
+					} catch (err) {
+						// Fail silently if the user has simply canceled the dialog.
+						if (err.name !== 'AbortError') {
+							reject(err);
+							return;
+						}
+					}
+				}
+				// Fallback if the File System Access API is not supported…
+				// Create the blob URL.
+				const blobURL = URL.createObjectURL(blob);
+				// Create the `<a download>` element and append it invisibly.
+				const a = document.createElement('a');
+				a.href = blobURL;
+				a.download = "video.mp4";
+				a.style.display = 'none';
+				document.body.append(a);
+				// Programmatically click the element.
+				a.click();
+				// Revoke the blob URL and remove the element.
+				setTimeout(() => {
+					URL.revokeObjectURL(blobURL);
+					a.remove();
+					resolve();
+				}, 1000);
+			})
+		};
 	</script>
 </body>
 </html>

@@ -42,6 +42,12 @@ export default class Rectangle {
      * @param {ImageProps} opts
      */
     constructor(opts) {
+				if( opts.width === undefined ){
+					opts.width = opts.src.width;
+				}
+				if( opts.height === undefined ){
+					opts.height = opts.src.height;
+				}
         this.x = new TimelineNumber(opts.x);
         this.y = new TimelineNumber(opts.y);
         this.width = new TimelineNumber(opts.width);

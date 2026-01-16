@@ -3,9 +3,7 @@ import { DefaultScene, Colors, Easing } from "engine";
 // TODO:
 // 	- Text?
 //	- Opacity
-//	- Image full size if not given
 //	- Image aspect ratio property
-//	- Load editor content from url
 // 	- Rectangle and polygon drawable animation
 // 	- Rotate/Scale?
 // 	- Latex?

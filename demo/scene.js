@@ -1,8 +1,8 @@
 import { DefaultScene, Colors, Easing, Shapes } from "engine";
 
 // TODO:
-// 	- Rectangle and polygon drawable animation
 // 	- Rotate/Scale?
+// 	- Rectangle and polygon drawable animation
 // 	- Latex?
 // 	- Code?
 
@@ -64,5 +64,31 @@ export default class extends DefaultScene {
 			ease: Easing.easeInQuint,
 			delay: i * 50,
 		})))
+
+		this.play(CIRCLES[0].background.to({
+			to: Colors.BLACK,
+			duration: 500,
+			ease: Easing.easeInQuint,
+		}))
+		this.play(CIRCLES[1].background.to({
+			to: Colors.BLACK,
+			duration: 500,
+			ease: Easing.easeInQuint,
+		}))
+		this.play(CIRCLES[2].background.to({
+			to: Colors.BLACK,
+			duration: 500,
+			ease: Easing.easeInQuint,
+		}))
+		this.play(CIRCLES[3].background.to({
+			to: Colors.BLACK,
+			duration: 500,
+			ease: Easing.easeInQuint,
+		}))
+		this.play(CIRCLES[4].background.to({
+			to: Colors.BLACK,
+			duration: 500,
+			ease: Easing.easeInQuint,
+		}))
 	}
 }

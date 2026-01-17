@@ -1,7 +1,6 @@
 import { DefaultScene, Colors, Easing, Shapes } from "engine";
 
 // TODO:
-// 	- String animatable (just change value on time)
 // 	- Rectangle and polygon drawable animation
 // 	- Latex?
 // 	- Code?

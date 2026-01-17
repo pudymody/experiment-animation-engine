@@ -17,5 +17,9 @@ export default class extends DefaultScene {
 			// direction: "inherit",
 			// rotate: 0,
 		});
+
+		this.wait(1000);
+		this.play(t.text.to({ to: "Hola2!"}));
+		this.wait(1000);
 	}
 }

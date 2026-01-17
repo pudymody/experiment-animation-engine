@@ -1,6 +1,7 @@
 /** @import { Color } from '../core/animation_color' */
 import { TimelineColor, Colors } from "../core/animation_color.js";
 import { TimelineNumber } from "../core/animation_number.js";
+import { TimelineString } from "../core/animation_string.js";
 export default class Text {
 		/**
      * @public
@@ -76,7 +77,7 @@ export default class Text {
      */
     constructor(buildOpts) {
 				const opts = Object.assign({}, Text.DEFAULT, buildOpts);
-				this.text = opts.text;
+				this.text = new TimelineString(opts.text);
         this.x = new TimelineNumber(opts.x);
         this.y = new TimelineNumber(opts.y);
         this.strokeWidth = new TimelineNumber(opts.strokeWidth);
@@ -85,10 +86,10 @@ export default class Text {
         this.opacity = new TimelineNumber(opts.opacity);
         this.rotate = new TimelineNumber(opts.rotate);
         this.size = new TimelineNumber(opts.size);
-        this.font = opts.font;
-        this.align = opts.align;
-        this.baseline = opts.baseline;
-        this.direction = opts.direction;
+        this.font = new TimelineString(opts.font);
+        this.align = new TimelineString(opts.align);
+        this.baseline = new TimelineString(opts.baseline);
+        this.direction = new TimelineString(opts.direction);
     }
     /**
      * @param {number} time
@@ -103,6 +104,11 @@ export default class Text {
         this.opacity.update(time);
         this.rotate.update(time);
         this.size.update(time);
+        this.text.update(time);
+        this.font.update(time);
+        this.align.update(time);
+        this.baseline.update(time);
+        this.direction.update(time);
     }
     /**
      * @param {DrawingContext} ctx
@@ -116,18 +122,18 @@ export default class Text {
 
 				ctx.globalAlpha = this.opacity.value;
 
-        ctx.font = `${this.size.value}px ${this.font}`;
-				ctx.textAlign = this.align;
-				ctx.textBaseline = this.baseline;
-				ctx.direction = this.direction;
+        ctx.font = `${this.size.value}px ${this.font.value}`;
+				ctx.textAlign = this.align.value;
+				ctx.textBaseline = this.baseline.value;
+				ctx.direction = this.direction.value;
 
         ctx.strokeStyle = this.stroke.value.toString();
         ctx.fillStyle = this.background.value.toString();
 
-				ctx.fillText(this.text, this.x.value, this.y.value);
+				ctx.fillText(this.text.value, this.x.value, this.y.value);
         if (this.strokeWidth.value > 0) {
             ctx.lineWidth = this.strokeWidth.value;
-						ctx.strokeText(this.text, this.x.value, this.y.value);
+						ctx.strokeText(this.text.value, this.x.value, this.y.value);
         }
 
 				ctx.restore();

@@ -13,6 +13,7 @@ export default class extends DefaultScene {
 			// height: src.height,
 			// sHeight: src.height,
 			// opacity: 1,
+			// rotate: 0,
 		});
 	}
 }

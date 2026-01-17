@@ -14,6 +14,7 @@ export default class Rectangle {
 			background: Colors.WHITE,
 			stroke: Colors.BLACK,
 			opacity: 1,
+			rotate: 0,
 		};
     /**
      * @public
@@ -48,6 +49,10 @@ export default class Rectangle {
      */
     opacity;
     /**
+     * @public
+     */
+    rotate;
+    /**
      * @param {RectangleProps} opts
      */
     constructor(buildOpts) {
@@ -60,6 +65,7 @@ export default class Rectangle {
         this.background = new TimelineColor(opts.background);
         this.stroke = new TimelineColor(opts.stroke);
         this.opacity = new TimelineNumber(opts.opacity);
+        this.rotate = new TimelineNumber(opts.rotate);
     }
     /**
      * @param {number} time
@@ -74,13 +80,18 @@ export default class Rectangle {
         this.background.update(time);
         this.stroke.update(time);
         this.opacity.update(time);
+        this.rotate.update(time);
     }
     /**
      * @param {DrawingContext} ctx
      * @returns {void}
      */
     draw(ctx) {
-				const prevOpacity = ctx.globalAlpha;
+				ctx.save();
+				ctx.translate(this.x.value + this.width.value / 2, this.y.value + this.height.value / 2);
+				ctx.rotate(this.rotate.value);
+				ctx.translate(-(this.x.value + this.width.value / 2), -(this.y.value + this.height.value / 2));
+
 				ctx.globalAlpha = this.opacity.value;
 
         ctx.fillStyle = this.background.value.toString();
@@ -97,7 +108,7 @@ export default class Rectangle {
             ctx.stroke();
         }
 
-				ctx.globalAlpha = prevOpacity;
+				ctx.restore();
     }
 }
 /**

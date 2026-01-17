@@ -15,6 +15,7 @@ export default class extends DefaultScene {
 			// align: "start",
 			// baseline: "alphabetic",
 			// direction: "inherit",
+			// rotate: 0,
 		});
 	}
 }

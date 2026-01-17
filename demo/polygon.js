@@ -12,6 +12,7 @@ export default class extends DefaultScene {
 			// stroke: Colors.BLACK,
 			// strokeWidth: 1
 			// opacity: 1,
+			// rotate: 0,
 		});
 	}
 }

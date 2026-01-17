@@ -17,6 +17,7 @@ export default class Text {
 			background: Colors.WHITE,
 			x: 0,
 			y: 48,
+			rotate: 0,
 		}
     /**
      * @public
@@ -67,6 +68,10 @@ export default class Text {
      */
     direction;
     /**
+     * public@
+     */
+    rotate;
+    /**
      * @param {TextProps} opts
      */
     constructor(buildOpts) {
@@ -78,6 +83,7 @@ export default class Text {
         this.background = new TimelineColor(opts.background);
         this.stroke = new TimelineColor(opts.stroke);
         this.opacity = new TimelineNumber(opts.opacity);
+        this.rotate = new TimelineNumber(opts.rotate);
         this.size = new TimelineNumber(opts.size);
         this.font = opts.font;
         this.align = opts.align;
@@ -95,6 +101,7 @@ export default class Text {
         this.background.update(time);
         this.stroke.update(time);
         this.opacity.update(time);
+        this.rotate.update(time);
         this.size.update(time);
     }
     /**
@@ -102,7 +109,11 @@ export default class Text {
      * @returns {void}
      */
     draw(ctx) {
-				const prevOpacity = ctx.globalAlpha;
+				ctx.save();
+				ctx.translate(this.x.value, this.y.value);
+				ctx.rotate(this.rotate.value);
+				ctx.translate(-this.x.value, -this.y.value);
+
 				ctx.globalAlpha = this.opacity.value;
 
         ctx.font = `${this.size.value}px ${this.font}`;
@@ -119,7 +130,7 @@ export default class Text {
 						ctx.strokeText(this.text, this.x.value, this.y.value);
         }
 
-				ctx.globalAlpha = prevOpacity;
+				ctx.restore();
     }
 }
 /**

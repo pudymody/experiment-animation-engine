@@ -14,6 +14,7 @@ export default class Circle {
 			opacity: 1,
 			background: Colors.WHITE,
 			stroke: Colors.BLACK,
+			rotate: 0,
 		};
     /**
      * @public
@@ -36,6 +37,10 @@ export default class Circle {
      */
     arc;
     /**
+     * @public
+     */
+    rotate;
+    /**
      * @private
      */
     background;
@@ -57,6 +62,7 @@ export default class Circle {
         this.radius = new TimelineNumber(opts.radius);
         this.strokeWidth = new TimelineNumber(opts.strokeWidth);
         this.arc = new TimelineNumber(opts.arc);
+        this.rotate = new TimelineNumber(opts.rotate);
         this.opacity = new TimelineNumber(opts.opacity);
         this.background = new TimelineColor(opts.background);
         this.stroke = new TimelineColor(opts.stroke);
@@ -71,6 +77,7 @@ export default class Circle {
         this.radius.update(time);
         this.strokeWidth.update(time);
         this.arc.update(time);
+        this.rotate.update(time);
         this.background.update(time);
         this.stroke.update(time);
         this.opacity.update(time);
@@ -80,7 +87,11 @@ export default class Circle {
      * @returns {void}
      */
     draw(ctx) {
-				const prevOpacity = ctx.globalAlpha;
+				ctx.save();
+				ctx.translate(this.x.value, this.y.value);
+				ctx.rotate(this.rotate.value);
+				ctx.translate(-this.x.value, -this.y.value);
+
 				ctx.globalAlpha = this.opacity.value;
 
         ctx.beginPath();
@@ -94,7 +105,7 @@ export default class Circle {
         }
         ctx.closePath();
 	
-				ctx.globalAlpha = prevOpacity;
+				ctx.restore();
     }
 }
 /**

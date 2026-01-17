@@ -11,6 +11,7 @@ export default class Image {
 			sx: 0,
 			sy: 0,
 			opacity: 1,
+			rotate: 0,
 		};
     /**
      * @private
@@ -53,6 +54,10 @@ export default class Image {
      */
     opacity;
     /**
+     * @public
+     */
+    rotate;
+    /**
      * @param {ImageProps} opts
      */
     constructor(buildOpts) {
@@ -78,6 +83,7 @@ export default class Image {
         this.sWidth = new TimelineNumber(opts.sWidth);
         this.sHeight = new TimelineNumber(opts.sHeight);
         this.opacity = new TimelineNumber(opts.opacity);
+        this.rotate = new TimelineNumber(opts.rotate);
 				this._src = opts.src;
     }
 		/**
@@ -106,18 +112,23 @@ export default class Image {
         this.sWidth.update(time);
         this.sHeight.update(time);
         this.opacity.update(time);
+        this.rotate.update(time);
     }
     /**
      * @param {DrawingContext} ctx
      * @returns {void}
      */
     draw(ctx) {
-			const prevOpacity = ctx.globalAlpha;
+			ctx.save();
+			ctx.translate(this.x.value + this.width.value / 2, this.y.value + this.height.value / 2);
+			ctx.rotate(this.rotate.value);
+			ctx.translate(-(this.x.value + this.width.value / 2), -(this.y.value + this.height.value / 2));
+
 			ctx.globalAlpha = this.opacity.value;
 
 			ctx.drawImage(this._src, this.sx.value, this.sy.value, this.sWidth.value, this.sHeight.value, this.x.value, this.y.value, this.width.value, this.height.value);
 
-			ctx.globalAlpha = prevOpacity;
+			ctx.restore();
     }
 }
 /**

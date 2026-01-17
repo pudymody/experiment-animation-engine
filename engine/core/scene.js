@@ -70,9 +70,9 @@ export class DefaultScene {
      * @returns {void}
      */
     update(time) {
-        this._currentTime = time;
+        this._currentTime = Math.min(time, this._endTime);
         for (let o of this._objects) {
-            o.update(time);
+            o.update(this._currentTime);
         }
     }
     /**

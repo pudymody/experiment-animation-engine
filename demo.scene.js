@@ -148,13 +148,14 @@ export default class extends DefaultScene {
 			ease: Easing.easeInQuad,
 			duration: 500,
 		}),
-		t.opacity.to({
+
+		])
+		this.wait(2000);
+		this.play(		t.opacity.to({
 			to: 0,
 			ease: Easing.easeInQuad,
-			duration: 250,
-			delay: 250,
-		})
-		])
+			duration: 0,
+		}))
 		this.wait(2000);
 	}
 }

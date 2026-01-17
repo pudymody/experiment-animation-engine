@@ -171,7 +171,7 @@ export class TimelineColor {
      */
     update(t) {
         let value = new Color(0, 0, 0, 0);
-        for (let k of this._keyframes) {
+        for (let k of this._keyframes.filter( k => k.at + k.delay <= t)) {
             value.r = value.r + k.value(t).r;
             value.g = value.g + k.value(t).g;
             value.b = value.b + k.value(t).b;

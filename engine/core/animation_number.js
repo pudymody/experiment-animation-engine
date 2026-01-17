@@ -123,7 +123,7 @@ export class TimelineNumber {
      */
     update(t) {
         let value = 0;
-        for (let k of this._keyframes) {
+        for (let k of this._keyframes.filter( k => k.at + k.delay <= t)) {
             value = value + k.value(t);
         }
         this._currentValue = value;

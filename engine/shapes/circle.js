@@ -1,7 +1,20 @@
 /** @import { Color } from '../core/animation_color' */
-import { TimelineColor } from "../core/animation_color.js";
+import { TimelineColor, Colors } from "../core/animation_color.js";
 import { TimelineNumber } from "../core/animation_number.js";
 export default class Circle {
+    /**
+     * @public
+     */
+		static DEFAULT = {
+			x: 0, 
+			y: 0,
+			radius: 100,
+			strokeWidth: 1,
+			arc: Math.PI * 2,
+			opacity: 1,
+			background: Colors.WHITE,
+			stroke: Colors.BLACK,
+		};
     /**
      * @public
      */
@@ -37,18 +50,13 @@ export default class Circle {
     /**
      * @param {CircleProps} opts
      */
-    constructor(opts) {
+    constructor(buildOpts) {
+				const opts = Object.assign({}, Circle.DEFAULT, buildOpts);
         this.x = new TimelineNumber(opts.x);
         this.y = new TimelineNumber(opts.y);
         this.radius = new TimelineNumber(opts.radius);
         this.strokeWidth = new TimelineNumber(opts.strokeWidth);
-        if (opts.arc === undefined) {
-            opts.arc = Math.PI * 2;
-        }
         this.arc = new TimelineNumber(opts.arc);
-				if( opts.opacity === undefined ){
-					opts.opacity = 1;
-				}
         this.opacity = new TimelineNumber(opts.opacity);
         this.background = new TimelineColor(opts.background);
         this.stroke = new TimelineColor(opts.stroke);

@@ -1,5 +1,6 @@
 /** @import { Keyframe } from '../core/animation' */
 /** @import { CircleProps } from '../shapes/circle' */
+import { Colors } from "./animation_color.js";
 import Circle from "../shapes/circle.js";
 import Point from "../shapes/point.js";
 import Polygon from "../shapes/polygon.js";
@@ -7,7 +8,7 @@ import Rectangle from "../shapes/rectangle.js";
 import EngineImage from "../shapes/image.js";
 import Text from "../shapes/text.js";
 ;
-;
+
 export class DefaultScene {
     /**
      * @private
@@ -28,17 +29,17 @@ export class DefaultScene {
      * @public
      * @default 0
      */
-    width = 0;
+    width = 1920;
     /**
      * @public
      * @default 0
      */
-    height = 0;
+    height = 1080;
     /**
      * @public
      * @default "white"
      */
-    background = "white";
+    background = Colors.WHITE;
     /**
      * @param {Object} o
      * @returns {void}
@@ -165,14 +166,11 @@ export class DefaultScene {
      * @param {ImageProps} opts
      * @returns {Image}
      */
-    async Image({ url, x,y, width, height }) {
-			const image = await imageBitmapFromURL(url);
+    async Image(opts) {
+			const image = await imageBitmapFromURL(opts.url);
 			const img = new EngineImage({
+				...opts,
 				src: image,
-				x: x,
-				y: y,
-				width: width,
-				height: height,
 			});
 			this.add(img);
 			return img;

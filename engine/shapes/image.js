@@ -1,7 +1,17 @@
 /** @import { Color } from '../core/animation_color' */
 import { TimelineColor } from "../core/animation_color.js";
 import { TimelineNumber } from "../core/animation_number.js";
-export default class Rectangle {
+export default class Image {
+    /**
+     * @public
+     */
+		static DEFAULT = {
+			x: 0,
+			y: 0,
+			sx: 0,
+			sy: 0,
+			opacity: 1,
+		};
     /**
      * @private
      */
@@ -45,24 +55,28 @@ export default class Rectangle {
     /**
      * @param {ImageProps} opts
      */
-    constructor(opts) {
+    constructor(buildOpts) {
+				const opts = Object.assign({}, Image.DEFAULT, buildOpts);
 				if( opts.width === undefined ){
 					opts.width = opts.src.width;
 				}
 				if( opts.height === undefined ){
 					opts.height = opts.src.height;
 				}
-				if( opts.opacity === undefined ){
-					opts.opacity = 1;
+				if( opts.sWidth === undefined ){
+					opts.sWidth = opts.src.width;
+				}
+				if( opts.sHeight === undefined ){
+					opts.sHeight = opts.src.height;
 				}
         this.x = new TimelineNumber(opts.x);
         this.y = new TimelineNumber(opts.y);
         this.width = new TimelineNumber(opts.width);
         this.height = new TimelineNumber(opts.height);
-        this.sx = new TimelineNumber(0);
-        this.sy = new TimelineNumber(0);
-        this.sWidth = new TimelineNumber(opts.src.width);
-        this.sHeight = new TimelineNumber(opts.src.height);
+        this.sx = new TimelineNumber(opts.sx);
+        this.sy = new TimelineNumber(opts.sy);
+        this.sWidth = new TimelineNumber(opts.sWidth);
+        this.sHeight = new TimelineNumber(opts.sHeight);
         this.opacity = new TimelineNumber(opts.opacity);
 				this._src = opts.src;
     }

@@ -1,7 +1,23 @@
 /** @import { Color } from '../core/animation_color' */
-import { TimelineColor } from "../core/animation_color.js";
+import { TimelineColor, Colors } from "../core/animation_color.js";
 import { TimelineNumber } from "../core/animation_number.js";
 export default class Text {
+		/**
+     * @public
+     */
+		static DEFAULT = {
+			opacity: 1,
+			size: 48,
+			font: "sans-serif",
+			align: "start",
+			baseline: "alphabetic",
+			direction: "inherit",
+			strokeWidth: 1,
+			stroke: Colors.BLACK,
+			background: Colors.WHITE,
+			x: 0,
+			y: 48,
+		}
     /**
      * @public
      */
@@ -53,25 +69,8 @@ export default class Text {
     /**
      * @param {TextProps} opts
      */
-    constructor(opts) {
-				if( opts.opacity === undefined ){
-					opts.opacity = 1;
-				}
-				if( opts.size === undefined ){
-					opts.size = 10;
-				}
-				if( opts.font === undefined ){
-					opts.font = "sans-serif";
-				}
-				if( opts.align === undefined ){
-					opts.align = "start";
-				}
-				if( opts.baseline === undefined ){
-					opts.baseline = "alphabetic";
-				}
-				if( opts.direction === undefined ){
-					opts.direction = "inherit";
-				}
+    constructor(buildOpts) {
+				const opts = Object.assign({}, Text.DEFAULT, buildOpts);
 				this.text = opts.text;
         this.x = new TimelineNumber(opts.x);
         this.y = new TimelineNumber(opts.y);

@@ -13,6 +13,12 @@ export default class Point {
      * @param {number} y
      */
     constructor(x, y) {
+				if(x == undefined){
+					x = 0;
+				}
+				if( y === undefined ){
+					y = 0;
+				}
         this.x = new TimelineNumber(x);
         this.y = new TimelineNumber(y);
     }

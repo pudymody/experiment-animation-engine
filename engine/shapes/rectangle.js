@@ -1,7 +1,20 @@
 /** @import { Color } from '../core/animation_color' */
-import { TimelineColor } from "../core/animation_color.js";
+import { TimelineColor, Colors } from "../core/animation_color.js";
 import { TimelineNumber } from "../core/animation_number.js";
 export default class Rectangle {
+    /**
+     * @public
+     */
+		static DEFAULT = {
+			x: 0,
+			y: 0,
+			width: 100,
+			height: 100,
+			strokeWidth: 1,
+			background: Colors.WHITE,
+			stroke: Colors.BLACK,
+			opacity: 1,
+		};
     /**
      * @public
      */
@@ -37,10 +50,8 @@ export default class Rectangle {
     /**
      * @param {RectangleProps} opts
      */
-    constructor(opts) {
-				if( opts.opacity === undefined ){
-					opts.opacity = 1;
-				}
+    constructor(buildOpts) {
+				const opts = Object.assign({}, Rectangle.DEFAULT, buildOpts);
         this.x = new TimelineNumber(opts.x);
         this.y = new TimelineNumber(opts.y);
         this.width = new TimelineNumber(opts.width);

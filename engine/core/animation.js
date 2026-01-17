@@ -6,6 +6,7 @@ export {};
  * @property {T} to
  * @property {number} [duration]
  * @property {number} [at]
+ * @property {number} [delay]
  * @property {Easing} [ease]
  */
 /**

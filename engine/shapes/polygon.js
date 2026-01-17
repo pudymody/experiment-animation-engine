@@ -1,7 +1,16 @@
 /** @import { Color } from '../core/animation_color' */
-import { TimelineColor } from "../core/animation_color.js";
+import { TimelineColor, Colors } from "../core/animation_color.js";
 import { TimelineNumber } from "../core/animation_number.js";
 export default class Polygon {
+    /**
+     * @public
+     */
+		static DEFAULT = {
+			strokeWidth: 1,
+			background: Colors.WHITE,
+			stroke: Colors.BLACK,
+			opacity: 1,
+		};
     /**
      * @public
      */
@@ -25,14 +34,13 @@ export default class Polygon {
     /**
      * @param {PolygonProps} opts
      */
-    constructor(opts) {
-        if (opts.points === undefined || opts.points.length < 2) {
+    constructor(buildOpts) {
+        if (buildOpts.points === undefined || buildOpts.points.length < 2) {
             throw new Error("Polygon constructor must have more than 2 points");
         }
-				if( opts.opacity === undefined ){
-					opts.opacity = 1;
-				}
-        this.points = opts.points;
+        this.points = buildOpts.points;
+
+				const opts = Object.assign({}, Polygon.DEFAULT, buildOpts);
         this.strokeWidth = new TimelineNumber(opts.strokeWidth);
         this.background = new TimelineColor(opts.background);
         this.stroke = new TimelineColor(opts.stroke);

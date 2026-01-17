@@ -1,161 +1,68 @@
-import { DefaultScene, Colors, Easing } from "engine";
+import { DefaultScene, Colors, Easing, Shapes } from "engine";
 
 // TODO:
 // 	- Rectangle and polygon drawable animation
 // 	- Rotate/Scale?
 // 	- Latex?
 // 	- Code?
-export default class extends DefaultScene {
-	constructor() {
-		super();
 
-		this.width = 1920;
-		this.height = 1080;
-		this.background = Colors.BLUE;
+class CustomWidget {
+	constructor(){
+		this.t = new Shapes.Text({
+			text: "",
+			x: 100,
+			y: 1060,
+			size: 100,
+			font: "monospace",
+			background: Colors.BLACK,
+			strokeWidth: 0,
+		})
 	}
 
+	update(time){
+		this.t.text = Math.floor(time).toString();
+	}
+
+	draw(ctx){
+		this.t.draw(ctx);
+	}
+}
+
+export default class extends DefaultScene {
 	async setup() {
-		const image = await this.Image({ url: "2.jpg", x: 200,y: 200, width: 1000, height: 429 });
-		this.play([
-			image.width.to({
-				to: 2000,
-				delay: 500,
-				ease: Easing.easeInQuad,
-				duration: 500,
-			}),
-			image.height.to({
-				to: 859,
-				delay: 500,
-				ease: Easing.easeInQuad,
-				duration: 500,
-			}),
-			image.x.to({
-				to: 0,
-				ease: Easing.easeInQuad,
-				duration: 500,
-			}),
-			image.y.to({
-				to: 0,
-				ease: Easing.easeInQuad,
-				duration: 500,
-			}),
-		])
+		const customWidget = new CustomWidget();
+		this.add(customWidget);
 
-		const circleRadius = 10;
-		const c = this.Circle({
-			x: this.width / 2 - circleRadius,
-			y: this.height / 2 - circleRadius,
-			radius: circleRadius,
-			background: Colors.TRANSPARENT,
-			strokeWidth: 2,
-			stroke: Colors.BLACK,
-			arc: 0,
-		});
+		const SPACING = 100;
+		const CIRCLE_COUNT = 5;
+		const CIRCLE_RADIUS = (this.width - (CIRCLE_COUNT + 1)*SPACING) / CIRCLE_COUNT / 2;
+		const CIRCLE_COLORS = [Colors.RED, Colors.GREEN, Colors.BLUE, Colors.BLACK, Colors.WHITE];
+		const CIRCLES = [];
+		for(let i = 0; i < CIRCLE_COUNT; i++){
+			const c = this.Circle({
+				x: (i+1)*SPACING + i*CIRCLE_RADIUS*2 + CIRCLE_RADIUS,
+				y: (this.height / 2) + CIRCLE_RADIUS / 2, 
+				radius: CIRCLE_RADIUS,
+				strokeWidth: 1,
+				background: CIRCLE_COLORS[i],
+			});
+			CIRCLES.push(c);
+		}
 
-		const r = this.Rectangle({
-			x: 0,
-			y: 0,
-			width: 0,
-			height: 0,
-			background: Colors.WHITE,
-			stroke: Colors.TRANSPARENT,
-			strokeWidth: 0
-		});
-
-		const p = this.Polygon({
-			points: [
-				this.Point(800, 800),
-				this.Point(1000, 1000),
-				this.Point(600, 1000)
-			],
-			background: Colors.TRANSPARENT,
-			stroke: Colors.TRANSPARENT,
-			strokeWidth: 0
-		});
-
-		this.play(c.arc.to({
-			to: Math.PI * 2,
-			duration: 750,
-			ease: Easing.easeOutQuad,
-		}));
-
-		this.play([
-			c.background.to({
-				to: Colors.RED,
-				ease: Easing.easeInQuad,
-				duration: 500,
-			}),
-			c.stroke.to({
-				to: Colors.RED,
-				ease: Easing.easeInQuad,
-				duration: 500,
-			})
-		])
-
-		this.wait(5000);
-
-		this.play(c.radius.to({
-			to: 2203,
-			duration: 1000,
-			ease: Easing.easeInExpo
-		}))
-
-		this.play([
-			r.width.to({
-				to: this.width,
-				duration: 750,
-				ease: Easing.easeOutQuad,
-			}),
-			r.height.to({
-				to: this.height,
-				duration: 750,
-				ease: Easing.easeOutQuad,
-			})
-		]);
-
-		this.play(p.background.to({
-			to: Colors.GREEN,
-			ease: Easing.easeInQuad,
+		this.play(CIRCLES.map( (c,i) => c.y.to({
+			to: CIRCLE_RADIUS+SPACING,
 			duration: 500,
-		}));
+			ease: Easing.easeInQuint,
+			delay: i * 50,
+		})))
 
-		this.play(p.opacity.to({
-			to: 0,
-			ease: Easing.easeInQuad,
-			duration: 500,
-		}))
-		this.play(r.opacity.to({
-			to: 0,
-			ease: Easing.easeInQuad,
-			duration: 500,
-		}))
-		this.play(c.opacity.to({
-			to: 0,
-			ease: Easing.easeInQuad,
-			duration: 500,
-		}))
-		this.play(image.opacity.to({
-			to: 0,
-			ease: Easing.easeInQuad,
-			duration: 500,
-		}))
-
-		const t = this.Text({ text: "Hola!", font: "monospace", size: 48, x: 1920 / 2, y: 1080 /2, align: "center", baseline: "middle", background: Colors.BLACK, stroke: Colors.TRANSPARENT });
 		this.wait(2000);
-		this.play([
-			t.size.to({
-			to: 200,
-			ease: Easing.easeInQuad,
-			duration: 500,
-		}),
 
-		])
-		this.wait(2000);
-		this.play(		t.opacity.to({
-			to: 0,
-			ease: Easing.easeInQuad,
-			duration: 0,
-		}))
-		this.wait(2000);
+		this.play(CIRCLES.map( (c,i) => c.y.to({
+			to: this.height - CIRCLE_RADIUS - SPACING,
+			duration: 500,
+			ease: Easing.easeInQuint,
+			delay: i * 50,
+		})))
 	}
 }

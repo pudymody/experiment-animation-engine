@@ -6,24 +6,14 @@ import { DefaultScene, Colors, Easing, Shapes } from "engine";
 // 	- Code?
 
 class CustomWidget {
-	constructor(){
-		this.t = new Shapes.Text({
-			text: "",
-			x: 100,
-			y: 1060,
-			size: 100,
-			font: "monospace",
-			background: Colors.BLACK,
-			strokeWidth: 0,
-		})
-	}
-
 	update(time){
-		this.t.text = Math.floor(time).toString();
+      this.text = Math.floor(time).toString()
 	}
 
 	draw(ctx){
-		this.t.draw(ctx);
+      ctx.fillStyle = "black";
+      ctx.font = "100px monospace"
+      ctx.fillText(this.text, 100, 1060)
 	}
 }
 

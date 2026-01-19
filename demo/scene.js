@@ -41,7 +41,7 @@ export default class extends DefaultScene {
 		this.play(CIRCLES.map( (c,i) => c.y.to({
 			to: CIRCLE_RADIUS+SPACING,
 			duration: 500,
-			ease: Easing.easeInQuint,
+			ease: Easing.easeInOutCubic,
 			delay: i * 50,
 		})))
 
@@ -50,34 +50,34 @@ export default class extends DefaultScene {
 		this.play(CIRCLES.map( (c,i) => c.y.to({
 			to: this.height - CIRCLE_RADIUS - SPACING,
 			duration: 500,
-			ease: Easing.easeInQuint,
+			ease: Easing.easeInOutCubic,
 			delay: i * 50,
 		})))
 
 		this.play(CIRCLES[0].background.to({
 			to: Colors.BLACK,
 			duration: 500,
-			ease: Easing.easeInQuint,
+			ease: Easing.easeInOutCubic,
 		}))
 		this.play(CIRCLES[1].background.to({
 			to: Colors.BLACK,
 			duration: 500,
-			ease: Easing.easeInQuint,
+			ease: Easing.easeInOutCubic,
 		}))
 		this.play(CIRCLES[2].background.to({
 			to: Colors.BLACK,
 			duration: 500,
-			ease: Easing.easeInQuint,
+			ease: Easing.easeInOutCubic,
 		}))
 		this.play(CIRCLES[3].background.to({
 			to: Colors.BLACK,
 			duration: 500,
-			ease: Easing.easeInQuint,
+			ease: Easing.easeInOutCubic,
 		}))
 		this.play(CIRCLES[4].background.to({
 			to: Colors.BLACK,
 			duration: 500,
-			ease: Easing.easeInQuint,
+			ease: Easing.easeInOutCubic,
 		}))
 	}
 }

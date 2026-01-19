@@ -7,4 +7,5 @@ export * from "./core/animation_color.js";
 export * from "./core/animation.js";
 export * from "./core/animation_number.js";
 export * from "./core/animation_string.js";
+export * from "./core/animation_function.js";
 export * from "./core/scene.js";

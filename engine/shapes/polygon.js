@@ -47,6 +47,7 @@ export default class Polygon {
 			stroke: Colors.BLACK,
 			opacity: 1,
 			rotate: 0,
+			dashOffset: 0,
 		};
     /**
      * @public
@@ -72,6 +73,10 @@ export default class Polygon {
      * @private
      */
     rotate;
+   /**
+     * @public
+     */
+    dashOffset;
     /**
      * @param {PolygonProps} opts
      */
@@ -87,6 +92,7 @@ export default class Polygon {
         this.stroke = new TimelineColor(opts.stroke);
         this.opacity = new TimelineNumber(opts.opacity);
         this.rotate = new TimelineNumber(opts.rotate);
+        this.dashOffset = new TimelineNumber(opts.dashOffset);
     }
     /**
      * @param {number} time
@@ -101,6 +107,36 @@ export default class Polygon {
         this.stroke.update(time);
         this.opacity.update(time);
         this.rotate.update(time);
+        this.dashOffset.update(time);
+    }
+		/**
+     * @returns {number}
+     */
+		get perimeter(){
+			let acc = 0;
+			for (let i = 1; i < this.points.length; i++) {
+				acc += Math.sqrt(
+					Math.pow((this.points[i-1].x.value - this.points[i].x.value), 2)+
+					Math.pow((this.points[i-1].y.value - this.points[i].y.value), 2)
+				)
+			}
+
+			acc += Math.sqrt(
+					Math.pow((this.points[0].x.value - this.points.at(-1).x.value), 2)+
+					Math.pow((this.points[0].y.value - this.points.at(-1).y.value), 2)
+				)
+
+			return acc;
+		}
+	 /**
+     * @param {Pick<Keyframe<any>, "at" | "endTime">[]} frames
+     * @returns {void}
+     */
+    spawn(opts) {
+			return [
+				this.dashOffset.to({...opts, to: this.perimeter, duration: 0}),
+				this.dashOffset.to({ ...opts, to: 0 })
+			]
     }
     /**
      * @param {DrawingContext} ctx
@@ -114,6 +150,9 @@ export default class Polygon {
 				ctx.translate(-cx, -cy);
 
 				ctx.globalAlpha = this.opacity.value;
+
+				ctx.setLineDash([this.perimeter]);
+				ctx.lineDashOffset = this.dashOffset.value;
 
         ctx.fillStyle = this.background.value.toString();
         ctx.strokeStyle = this.stroke.value.toString();

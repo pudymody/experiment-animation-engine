@@ -12,6 +12,7 @@ export default class extends DefaultScene {
 			// stroke: Colors.BLACK,
 			// opacity: 1,
 			// rotate: 0,
+			// dashOffset: 0,
 		});
 	}
 }

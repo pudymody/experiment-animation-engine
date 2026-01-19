@@ -83,6 +83,16 @@ export default class Circle {
         this.opacity.update(time);
     }
     /**
+     * @param {Pick<Keyframe<any>, "at" | "endTime">[]} frames
+     * @returns {void}
+     */
+    spawn(opts) {
+			return [
+				this.arc.to({...opts, to: 0, duration: 0,}),
+				this.arc.to({ ...opts, to: Math.PI * 2 })
+			]
+    }
+    /**
      * @param {DrawingContext} ctx
      * @returns {void}
      */

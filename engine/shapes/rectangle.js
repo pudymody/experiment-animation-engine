@@ -15,6 +15,7 @@ export default class Rectangle {
 			stroke: Colors.BLACK,
 			opacity: 1,
 			rotate: 0,
+			dashOffset: 0,
 		};
     /**
      * @public
@@ -53,6 +54,10 @@ export default class Rectangle {
      */
     rotate;
     /**
+     * @public
+     */
+    dashOffset;
+    /**
      * @param {RectangleProps} opts
      */
     constructor(buildOpts) {
@@ -66,6 +71,7 @@ export default class Rectangle {
         this.stroke = new TimelineColor(opts.stroke);
         this.opacity = new TimelineNumber(opts.opacity);
         this.rotate = new TimelineNumber(opts.rotate);
+        this.dashOffset = new TimelineNumber(opts.dashOffset);
     }
     /**
      * @param {number} time
@@ -81,6 +87,17 @@ export default class Rectangle {
         this.stroke.update(time);
         this.opacity.update(time);
         this.rotate.update(time);
+        this.dashOffset.update(time);
+    }
+    /**
+     * @param {Pick<Keyframe<any>, "at" | "endTime">[]} frames
+     * @returns {void}
+     */
+    spawn(opts) {
+			return [
+				this.dashOffset.to({...opts, to: this.width.value * 2 + this.height.value*2, duration: 0}),
+				this.dashOffset.to({ ...opts, to: 0 })
+			]
     }
     /**
      * @param {DrawingContext} ctx
@@ -93,7 +110,8 @@ export default class Rectangle {
 				ctx.translate(-(this.x.value + this.width.value / 2), -(this.y.value + this.height.value / 2));
 
 				ctx.globalAlpha = this.opacity.value;
-
+				ctx.setLineDash([this.width.value*2 + this.height.value*2]);
+				ctx.lineDashOffset = this.dashOffset.value;
         ctx.fillStyle = this.background.value.toString();
         ctx.strokeStyle = this.stroke.value.toString();
         ctx.beginPath();

@@ -1,4 +1,4 @@
-import { DefaultScene, Colors } from "engine";
+import { DefaultScene, Colors, Easing } from "engine";
 
 export default class extends DefaultScene {
 	async setup() {
@@ -13,5 +13,7 @@ export default class extends DefaultScene {
 			// opacity: 1,
 			// rotate: 0,
 		});
+
+		this.play( c.spawn({ duration: 1250, ease: Easing.easeInOutCubic }) )
 	}
 }

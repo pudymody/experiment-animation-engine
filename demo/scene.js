@@ -1,7 +1,6 @@
 import { DefaultScene, Colors, Easing, Shapes } from "engine";
 
 // TODO:
-// 	- Rectangle and polygon drawable animation
 // 	- Latex?
 // 	- Code?
 

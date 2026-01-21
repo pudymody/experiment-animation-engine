@@ -1,5 +1,5 @@
 /** @import { Color } from '../core/animation_color' */
-import { TimelineColor, Colors } from "../core/animation_color.js";
+import { TimelineColor, Color, Colors } from "../core/animation_color.js";
 import { TimelineNumber } from "../core/animation_number.js";
 export default class Circle {
     /**
@@ -57,15 +57,15 @@ export default class Circle {
      */
     constructor(buildOpts) {
 				const opts = Object.assign({}, Circle.DEFAULT, buildOpts);
-        this.x = new TimelineNumber(opts.x);
-        this.y = new TimelineNumber(opts.y);
-        this.radius = new TimelineNumber(opts.radius);
-        this.strokeWidth = new TimelineNumber(opts.strokeWidth);
-        this.arc = new TimelineNumber(opts.arc);
-        this.rotate = new TimelineNumber(opts.rotate);
-        this.opacity = new TimelineNumber(opts.opacity);
-        this.background = new TimelineColor(opts.background);
-        this.stroke = new TimelineColor(opts.stroke);
+        this.x = (typeof opts.x === "number" ? new TimelineNumber(opts.x) : opts.x);
+        this.y = (typeof opts.y === "number" ? new TimelineNumber(opts.y) : opts.y);
+        this.radius = (typeof opts.radius === "number" ? new TimelineNumber(opts.radius) : opts.radius);
+        this.strokeWidth = (typeof opts.strokeWidth === "number" ? new TimelineNumber(opts.strokeWidth): opts.strokeWidth);
+        this.arc = (typeof opts.arc === "number" ? new TimelineNumber(opts.arc) : opts.arc);
+        this.rotate = (typeof opts.rotate === "number" ? new TimelineNumber(opts.rotate) : opts.rotate);
+        this.opacity = (typeof opts.opacity === "number" ? new TimelineNumber(opts.opacity) : opts.opacity);
+        this.background = (opts.background instanceof Color ? new TimelineColor(opts.background) : opts.background);
+        this.stroke = (opts.background instanceof Color ? new TimelineColor(opts.stroke) : opts.stroke);
     }
     /**
      * @param {number} time

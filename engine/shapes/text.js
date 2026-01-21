@@ -1,5 +1,5 @@
 /** @import { Color } from '../core/animation_color' */
-import { TimelineColor, Colors } from "../core/animation_color.js";
+import { TimelineColor, Colors, Color } from "../core/animation_color.js";
 import { TimelineNumber } from "../core/animation_number.js";
 import { TimelineString } from "../core/animation_string.js";
 export default class Text {
@@ -77,19 +77,19 @@ export default class Text {
      */
     constructor(buildOpts) {
 				const opts = Object.assign({}, Text.DEFAULT, buildOpts);
-				this.text = new TimelineString(opts.text);
-        this.x = new TimelineNumber(opts.x);
-        this.y = new TimelineNumber(opts.y);
-        this.strokeWidth = new TimelineNumber(opts.strokeWidth);
-        this.background = new TimelineColor(opts.background);
-        this.stroke = new TimelineColor(opts.stroke);
-        this.opacity = new TimelineNumber(opts.opacity);
-        this.rotate = new TimelineNumber(opts.rotate);
-        this.size = new TimelineNumber(opts.size);
-        this.font = new TimelineString(opts.font);
-        this.align = new TimelineString(opts.align);
-        this.baseline = new TimelineString(opts.baseline);
-        this.direction = new TimelineString(opts.direction);
+				this.text = (typeof opts.text === "string" ? new TimelineString(opts.text) : opts.text);
+        this.x = (typeof opts.x === "number" ? new TimelineNumber(opts.x) : opts.x);
+        this.y = (typeof opts.y === "number" ? new TimelineNumber(opts.y) : opts.y);
+        this.strokeWidth = (typeof opts.strokeWidth === "number" ? new TimelineNumber(opts.strokeWidth) : opts.strokeWidth);
+        this.background = (opts.background instanceof Color ? new TimelineColor(opts.background) : opts.background);
+        this.stroke = (opts.stroke instanceof Color ? new TimelineColor(opts.stroke) : opts.stroke);
+        this.opacity = (typeof opts.opacity === "number" ? new TimelineNumber(opts.opacity) : opts.opacity);
+        this.rotate = (typeof opts.rotate === "number" ? new TimelineNumber(opts.rotate) : opts.rotate);
+        this.size = (typeof opts.size === "number" ? new TimelineNumber(opts.size) : opts.size);
+        this.font = (typeof opts.font === "string" ? new TimelineString(opts.font) : opts.font);
+        this.align = (typeof opts.align === "string" ? new TimelineString(opts.align) : opts.align);
+        this.baseline = (typeof opts.baseline === "string" ? new TimelineString(opts.baseline) : opts.baseline);
+        this.direction = (typeof opts.direction === "string" ? new TimelineString(opts.direction) : opts.direction);
     }
     /**
      * @param {number} time

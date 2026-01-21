@@ -74,16 +74,16 @@ export default class Image {
 				if( opts.sHeight === undefined ){
 					opts.sHeight = opts.src.height;
 				}
-        this.x = new TimelineNumber(opts.x);
-        this.y = new TimelineNumber(opts.y);
-        this.width = new TimelineNumber(opts.width);
-        this.height = new TimelineNumber(opts.height);
-        this.sx = new TimelineNumber(opts.sx);
-        this.sy = new TimelineNumber(opts.sy);
-        this.sWidth = new TimelineNumber(opts.sWidth);
-        this.sHeight = new TimelineNumber(opts.sHeight);
-        this.opacity = new TimelineNumber(opts.opacity);
-        this.rotate = new TimelineNumber(opts.rotate);
+        this.x = (typeof opts.x === "number" ? new TimelineNumber(opts.x) : opts.x);
+        this.y = (typeof opts.y === "number" ? new TimelineNumber(opts.y) : opts.y);
+        this.width = (typeof opts.width === "number" ? new TimelineNumber(opts.width) : opts.width);
+        this.height = (typeof opts.height === "number" ? new TimelineNumber(opts.height) : opts.height);
+        this.sx = (typeof opts.sx === "number" ? new TimelineNumber(opts.sx) : opts.sx);
+        this.sy = (typeof opts.sy === "number" ? new TimelineNumber(opts.sy) : opts.sy);
+        this.sWidth = (typeof opts.sWidth === "number" ? new TimelineNumber(opts.sWidth) : opts.sWidth);
+        this.sHeight = (typeof opts.sHeight === "number" ? new TimelineNumber(opts.sHeight) : opts.sHeight);
+        this.opacity = (typeof opts.opacity === "number" ? new TimelineNumber(opts.opacity) : opts.opacity);
+        this.rotate = (typeof opts.rotate === "number" ? new TimelineNumber(opts.rotate) : opts.rotate);
 				this._src = opts.src;
     }
 		/**

@@ -19,8 +19,8 @@ export default class Point {
 				if( y === undefined ){
 					y = 0;
 				}
-        this.x = new TimelineNumber(x);
-        this.y = new TimelineNumber(y);
+        this.x = (typeof x === "number" ? new TimelineNumber(x) : x);
+        this.y = (typeof y === "number" ? new TimelineNumber(y) : y);
     }
     /**
      * @param {number} time

@@ -1,5 +1,5 @@
 /** @import { Color } from '../core/animation_color' */
-import { TimelineColor, Colors } from "../core/animation_color.js";
+import { TimelineColor, Colors, Color } from "../core/animation_color.js";
 import { TimelineNumber } from "../core/animation_number.js";
 
 function area(pts){
@@ -87,12 +87,12 @@ export default class Polygon {
         this.points = buildOpts.points;
 
 				const opts = Object.assign({}, Polygon.DEFAULT, buildOpts);
-        this.strokeWidth = new TimelineNumber(opts.strokeWidth);
-        this.background = new TimelineColor(opts.background);
-        this.stroke = new TimelineColor(opts.stroke);
-        this.opacity = new TimelineNumber(opts.opacity);
-        this.rotate = new TimelineNumber(opts.rotate);
-        this.dashOffset = new TimelineNumber(opts.dashOffset);
+        this.strokeWidth = (typeof opts.strokeWidth === "number" ? new TimelineNumber(opts.strokeWidth) : opts.strokeWidth);
+        this.opacity = (typeof opts.opacity === "number" ? new TimelineNumber(opts.opacity) : opts.opacity);
+        this.rotate = (typeof opts.rotate === "number" ? new TimelineNumber(opts.rotate) : opts.rotate);
+        this.dashOffset = (typeof opts.dashOffset === "number" ? new TimelineNumber(opts.dashOffset) : opts.dashOffset);
+        this.background = (opts.background instanceof Color ? new TimelineColor(opts.background) : opts.background);
+        this.stroke = (opts.stroke instanceof Color ? new TimelineColor(opts.stroke) : opts.stroke);
     }
     /**
      * @param {number} time

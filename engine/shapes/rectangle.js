@@ -62,16 +62,16 @@ export default class Rectangle {
      */
     constructor(buildOpts) {
 				const opts = Object.assign({}, Rectangle.DEFAULT, buildOpts);
-        this.x = new TimelineNumber(opts.x);
-        this.y = new TimelineNumber(opts.y);
-        this.width = new TimelineNumber(opts.width);
-        this.height = new TimelineNumber(opts.height);
-        this.strokeWidth = new TimelineNumber(opts.strokeWidth);
-        this.background = new TimelineColor(opts.background);
-        this.stroke = new TimelineColor(opts.stroke);
-        this.opacity = new TimelineNumber(opts.opacity);
-        this.rotate = new TimelineNumber(opts.rotate);
-        this.dashOffset = new TimelineNumber(opts.dashOffset);
+        this.x = (typeof opts.x === "number" ? new TimelineNumber(opts.x) : opts.x);
+        this.y = (typeof opts.y === "number" ? new TimelineNumber(opts.y) : opts.y);
+        this.width = (typeof opts.width === "number" ? new TimelineNumber(opts.width) : opts.width);
+        this.height = (typeof opts.height === "number" ? new TimelineNumber(opts.height) : opts.height);
+        this.strokeWidth = (typeof opts.strokeWidth === "number" ? new TimelineNumber(opts.strokeWidth) : opts.strokeWidth);
+        this.background = (opts.background instanceof Color ? new TimelineColor(opts.background) : opts.background);
+        this.stroke = (opts.stroke instanceof Color ? new TimelineColor(opts.stroke) : opts.stroke);
+        this.opacity = (typeof opts.opacity === "number" ? new TimelineNumber(opts.opacity) : opts.opacity);
+        this.rotate = (typeof opts.rotate === "number" ? new TimelineNumber(opts.rotate) : opts.rotate);
+        this.dashOffset = (typeof opts.dashOffset === "number" ? new TimelineNumber(opts.dashOffset) : opts.dashOffset);
     }
     /**
      * @param {number} time

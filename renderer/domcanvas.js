@@ -169,7 +169,7 @@ export default class DOMCanvas extends HTMLElement {
         this.ctx.clearRect(0, 0, this.$canvas.width, this.$canvas.height);
         this._playTime = value;
         if (this._jsSrc !== undefined) {
-            this._jsSrc.currentTime = value;
+            this._jsSrc.currentTime = Math.min(value, this._jsSrc.endTime);
             this._jsSrc.draw(this.ctx);
             const currentTimeEvent = new CustomEvent("currentTime", { detail: value });
             this.dispatchEvent(currentTimeEvent);
@@ -196,7 +196,7 @@ export default class DOMCanvas extends HTMLElement {
             this.start = time - this._playTime;
         }
         this.playTime = time - this.start;
-        if (this._jsSrc !== undefined && this._playTime > this._jsSrc.endTime) {
+        if (this._jsSrc !== undefined && this._playTime >= this._jsSrc.endTime) {
 						this._playTime = this._jsSrc.endTime;
             this.pause();
             return;

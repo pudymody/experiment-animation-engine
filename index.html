@@ -146,10 +146,30 @@
 		});
 
 		let fileURL = "demo/scene.js";
-		let fileQuery = new URLSearchParams(window.location.search).get("url");
+		let currentURL = new URL(window.location);
+		let fileQuery = currentURL.searchParams.get("url");
 		if( fileQuery != null ){
 			fileURL = fileQuery;
 		}
+
+		let layout = "horizontal";
+		let layoutQuery = currentURL.searchParams.get("layout");
+		if( layoutQuery != null ){
+			layout = layoutQuery;
+		}
+		const layoutInput = document.getElementById(layout)
+		if( layoutInput !== null ){
+			layoutInput.checked = true;
+		}
+
+		document.querySelector("nav").addEventListener("change", function(e){
+			if( e.target.name !== "layout" ){
+				return;
+			}
+
+			currentURL.searchParams.set("layout", e.target.value);
+			window.history.replaceState(null, null, currentURL);
+		})
 
 		const editorContent = await fetch(fileURL).then( res => res.text() );
 		const view = new EditorView({

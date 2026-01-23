@@ -1,9 +1,5 @@
 import { DefaultScene, Colors, Easing, Shapes } from "engine";
 
-// TODO:
-// 	- Latex?
-// 	- Code?
-
 class CustomWidget {
 	update(time){
       this.text = Math.floor(time).toString()

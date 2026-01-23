@@ -2,294 +2,214 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-</head>
-<body>
 	<style>
+		/* Box sizing rules */
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+		}
+
+		/* Prevent font size inflation */
+		html {
+			-moz-text-size-adjust: none;
+			-webkit-text-size-adjust: none;
+			text-size-adjust: none;
+		}
+
+		/* Remove default margin in favour of better control in authored CSS */
+		body, h1, h2, h3, h4, p,
+		figure, blockquote, dl, dd {
+			margin-block-end: 0;
+		}
+
+		/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+		ul[role='list'],
+		ol[role='list'] {
+			list-style: none;
+		}
+
+		/* Set core body defaults */
 		body {
-			display: grid;
-			height: 100svh;
+			min-height: 100vh;
+			line-height: 1.5;
 			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-			background: #555;
+			font-size: 1.125rem;
+			font-family: system-ui, sans-serif;
+			font-weight: normal;
 		}
 
-		body:has(#horizontal:checked){
-			grid-template-rows: auto 1fr;
-			grid-template-columns: 1fr 1fr;
-		}
-		body:has(#vertical:checked){
-			grid-template-rows: auto 1fr 1fr;
-		}
-		body:has(#full:checked){
-			grid-template-rows: auto 0 1fr;
+		/* Set shorter line heights on headings and interactive elements */
+		h1, h2, h3, h4,
+		button, input, label {
+			line-height: 1.1;
 		}
 
-		nav {
-			grid-column: 1/-1;
-			display: flex;
-			box-sizing: border-box;
-			gap: 0.5rem;
-			padding: 0.5rem;
-			background: #2a2b2b;
-			width: 100%;
-
-			label > input {
-				position:absolute;
-				left:-10000px;
-				top:auto;
-				width:1px;
-				height:1px;
-				overflow:hidden;
-			}
-
-			input {
-				margin: 0;
-				flex: 1;
-			}
-
-			button {
-				all: unset;
-				display: block;
-			}
-
-			svg {
-				width: 1.75rem;
-				color: white;
-				cursor: pointer;
-				display: block;
-			}
+		/* Balance text wrapping on headings */
+		h1, h2,
+		h3, h4 {
+			text-wrap: balance;
 		}
 
-		#progress:empty {
-			display: none;
+		/* A elements that don't have a class get default styles */
+		a:not([class]) {
+			text-decoration-skip-ink: auto;
+			color: currentColor;
 		}
-		#progress {
+
+		/* Make images easier to work with */
+		img,
+		picture {
+			max-width: 100%;
 			display: block;
-			position: fixed;
-			background: green;
-			color: white;
-			right: 0.5rem;
-			top: 0.5rem;
-			font-size: 2rem;
-			padding: 0.5rem;
+		}
+
+		/* Inherit fonts for inputs and buttons */
+		input, button,
+		textarea, select {
+			font-family: inherit;
+			font-size: inherit;
+		}
+
+		/* Make sure textareas without a rows attribute are not tiny */
+		textarea:not([rows]) {
+			min-height: 10em;
+		}
+
+		/* Anything that has been anchored to should have extra scroll margin */
+		:target {
+			scroll-margin-block: 5ex;
+		}
+
+		section {
+			max-width: 120ch;
+			margin: 0 auto;
+			padding: 1rem;
+		}
+
+		section > * + * {
+			margin: 2rem auto;
+		}
+
+		h1 {
+			display: block;
+		}
+
+		iframe {
+			width: 100%;
+			border: none;
+			max-width: 960px;
+			aspect-ratio: 16/9;
+			display: block;
+		}
+
+		dd {
+			margin-bottom: 1em;
+		}
+
+		.callout {
+			margin-top: 2rem;
+			text-align: center;
+			background: #000;
+			color: #fff;
 			border-radius: 0.5rem;
 		}
-
-		.cm-editor {
-			background: white;
-			max-height: 100%;
-			max-width: 100%;
-			overflow: auto;
-		}
 	</style>
-	<nav>
-		<label for="horizontal">
-			<input type="radio" checked name="layout" value="horizontal" id="horizontal"/>
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
-		</label>
-		<label for="vertical">
-			<input type="radio" name="layout" value="vertical" id="vertical"/>
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" /></svg>
-		</label>
-		<label for="full">
-			<input type="radio" name="layout" value="full" id="full"/>
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" /></svg>
-		</label>
-		<button id="play">
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" /></svg>
-		</button>
-		<button id="stop">
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 7.5A2.25 2.25 0 0 1 7.5 5.25h9a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25h-9a2.25 2.25 0 0 1-2.25-2.25v-9Z" /> </svg>
-		</button>
-		<input id="position" type="range" min="0" max="0">
-		<button id="export">
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /> </svg>
-		</button>
-		<div id="progress"></div>
-	</nav>
-	<script type="importmap">
-		{
-			"imports": {
-				"engine": "/engine/index.js",
-				"renderer/video": "/renderer/video.js",
-				"renderer/domcanvas": "/renderer/domcanvas.js",
-				"mediabunny": "https://esm.sh/mediabunny",
-				"@codemirror/lang-javascript": "https://esm.sh/@codemirror/lang-javascript",
-				"codemirror": "https://esm.sh/codemirror"
-			}
-		}
-	</script>
-  <script type="module">
-		import VideoRenderer from "renderer/video";
-		import CanvasRenderer from "renderer/domcanvas"
+</head>
+<body>
+		<section class="callout">If you already know what this is all about or just want to see the editor and start playing you can go directly to the <a href="editor.html">editor</a></section>
+	<section>
+		<h1>Intro</h1>
+		<p>
+			Some time ago i tried to start toying around with making some of those beautiful programming/math videos you see on internet. Like the ones from <a href="https://www.youtube.com/@3blue1brown" target="_blank">3blue1brown</a>, <a href="https://www.youtube.com/@acegikmo" target="_blank">Freya Holmér</a> or <a href="https://www.youtube.com/@SebastianLague" target="_blank">Sebastian Lague</a>. I tried the big names in the space, <a href="https://motioncanvas.io/" target="_blank">Motion Canvas</a>, <a href="https://www.manim.community/" target="_blank">Manim</a> and <a href="https://p5js.org/" target="_blank">p5.js</a> but none of them checked all the items in my list.
+		</p>
+		<p>
+			Both Motion Canvas and Manim made you download a lot of dependencies and build some others just to start playing around. Manim has an online playground but is just a Jupyter notebook that takes a while to start. Here is where i believe p5 wins. Along its lovely and open comunity, you can just browse to the <a href="https://editor.p5js.org/" target="_blank">p5.js editor</a> and start playing. The problem is that p5 its geared towards <em>interactive experiences</em> where i wanted more of a <em>keyframe animations</em> like the others.
+		</p>
+		<p>
+			The easiness of p5 (or something in those lines) and the paradigm of Motion Canvas and Manim. That was the goal. First i started doing <a href="https://github.com/pudymody/experiment-animation-engine-rust-" target="_blank">some things with lua and rust</a> in an attempt to have a single binary file and dont have to build and download a lot of dependencies. Then i lost motivation and didnt like lua that much, it was just beacuse it's the default standard for embedded languages. Then i tried some more with javascript + rust but at this point i thought <em>Why not do it fully in the browser?</em>. It turns out you can export video using something like <a href="https://mediabunny.dev/" target="_blank">mediabunny</a>.
+		</p>
+		<p>
+			This is what was born out of this journey. Its still in an alpha/beta state. Lots of things missing and probably lots of edge cases i missed. And thats without counting the bugs.
+		</p>
+		<p>
+			But you can have something like this made entirely in the browser. You can read and play around in the <a href="editor.html?url=demo%2Fcircle_draw.js">full editor</a>. Or you can continue reading for some details and documentation.
+		</p>
+		<iframe src="editor.html?url=demo%2Fcircle_draw.js&layout=full"></iframe>
+	</section>
+	<section>
+		<h1>Getting Started</h1>
+			<p>Animations are defined in <em>Scenes</em>. A Scene is nothing more than a .js file with a default exported class that matches the following interface.</p>
+			<dl>
+				<dt>instance.width</dt>
+				<dd>Width of the resulting animation</dd>
 
-		import {javascript} from "@codemirror/lang-javascript"
-		import {EditorView, basicSetup} from "codemirror"
+				<dt>instance.height</dt>
+				<dd>Height of the resulting animation</dd>
 
-		let lastPlaytime = 0;
-		function playContent(content){
-			if( $canvas.src != "" ){
-				lastPlaytime = $canvas.playTime;
-				window.URL.revokeObjectURL($canvas.src);
-			}
-			const myBlob = new Blob([content], { type: 'text/javascript' });
-			$canvas.src = window.URL.createObjectURL(myBlob);
-		}
+				<dt>instance.endTime</dt>
+				<dd>Duration in milliseconds of the resulting animation</dd>
 
-		const myExtension = EditorView.domEventHandlers({
-			blur: (event, view) => {
-				playContent(view.state.doc.toString());
-			}
-		});
+				<dt>instance.currentTime</dt>
+				<dd>Current time in milliseconds. This is set by the player or exporter.</dd>
 
-		let fileURL = "demo/scene.js";
-		let currentURL = new URL(window.location);
-		let fileQuery = currentURL.searchParams.get("url");
-		if( fileQuery != null ){
-			fileURL = fileQuery;
-		}
+				<dt>async instance.setup()</dt>
+				<dd>Asyncronous function that will setup the animation. More of this later</dd>
 
-		let layout = "horizontal";
-		let layoutQuery = currentURL.searchParams.get("layout");
-		if( layoutQuery != null ){
-			layout = layoutQuery;
-		}
-		const layoutInput = document.getElementById(layout)
-		if( layoutInput !== null ){
-			layoutInput.checked = true;
-		}
+				<dt>instance.draw(ctx)</dt>
+				<dd>Draw function that will receive a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D" target="_blank">CanvasRenderingContext2D</a> object and should draw the animation.</dd>
+			</dl>
 
-		document.querySelector("nav").addEventListener("change", function(e){
-			if( e.target.name !== "layout" ){
-				return;
-			}
+			<p>Lets create a very basic one that will run for 1 second and print the current time in the center of the screen of size 1920x1920 pixels.</p>
 
-			currentURL.searchParams.set("layout", e.target.value);
-			window.history.replaceState(null, null, currentURL);
-		})
+			<iframe src="editor.html?url=demo%2Fscene_barebones.js"></iframe>
 
-		const editorContent = await fetch(fileURL).then( res => res.text() );
-		const view = new EditorView({
-			doc: editorContent,
-			parent: document.body,
-			extensions: [
-				basicSetup,
-				javascript({typescript: true}),
-				myExtension
-			]
-		})
+			<p>Now lets try to make one that will do the following: Move a circle from left to right in the span of 1 second. Wait for one second. Move the same circle from top to bottom in the span of 1 second.</p>
 
-		customElements.define("renderer-canvas", CanvasRenderer);
+			<iframe src="editor.html?url=demo%2Fscene_barebones2.js"></iframe>
 
-		// to allow nvim to not mess inodes we have to run
-		//:set nobackup nowritebackup
+			<p>As you can see from the code, we are not winning nothing over p5 or motion canvas with this. Here is where our first abstraction enters the game. <em>DefaultScene</em>. It allows you to have some default things that eases you common tasks.</p>
+			<p>First of all it defaults to a canvas of 1920x1080 with white background. If you dont like it, you can override the <em>width, height, background</em> properties in the constructor.</p>
+			<p>It also has some basic functions to handle animations timelines</p>
+			<dl>
+				<dt>this.wait(ms)</dt>
+				<dd>Waits for the amount of milliseconds updating the endTime acordingly</dd>
+				<dt>this.play([frames])</dt>
+				<dd>It will play all the frames in parallel at the current time and wait for all to finish</dd>
 
-		const $canvas = document.createElement("renderer-canvas");
-		document.body.appendChild($canvas);
+				<dt>this.play(frame)</dt>
+				<dd>It will play the frame at the current time and wait for it to finish</dd>
+			</dl>
+			<p>A frame is nothing more than an object with the <em>at</em> property that sets when the animation should start playing, and a <em>endTime</em> property that returns when the animation finishes.</p>
+			<p>The scene also has the capability of adding custom <em>widgets</em>. They are nothing more that objects with a <em>update(t)</em> and <em>draw(ctx)</em> methods. Update will be called each time a new frame is requested with the wanted time. And draw will be called to draw it to the canvas.</p>
+			<p>Along this it also provides basic widgets implementations to create: <a href="editor.html?url=demo%2Fcircle.js">Circle</a>, <a href="editor.html?url=demo%2Fpolygon.js">Polygon</a>, <a href="editor.html?url=demo%2Frectangle.js">Rectangle</a>, <a href="editor.html?url=demo%2Fimage.js">Image</a>, <a href="editor.html?url=demo%2Ftext.js">Text</a></p>
+			<p>All property from this objects allows you to call a <em>to</em> method that will return a <em>frame</em> object that plays nicely with the play method.</p>
+			<p>Or you could set them to an object that implements the following interface. If you have a single function you can call the <a href="editor.html?url=demo%2Fanimation_function.js">TimelineFunction</a></p>
+			<dl>
+				<dt>obj.update(t)</dt>
+				<dd>Updates the property accordly to the given time.</dd>
 
-		const $play = document.querySelector("#play");
-		$play.addEventListener("click", () => {
-			$canvas.toggle();
-		})
-
-		const playButton = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" /></svg>`;
-		const pauseButton = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /></svg>`;
-		$canvas.addEventListener("status", (e) => {
-			if( e.detail.playing ){
-				$play.innerHTML = pauseButton
-			}else{
-				$play.innerHTML = playButton
-			}
-		});
-
-		const $stop = document.querySelector("#stop");
-		$stop.addEventListener("click", () => {
-			$canvas.reset();
-		})
-
-		const $videoRenderer = new VideoRenderer;
-		$videoRenderer.addEventListener("progress", ({ detail }) => {
-			$progress.innerText = `${Math.floor(detail.current / detail.total * 100)}%`;
-		})
-		const $progress = document.querySelector("#progress");
-		const $export = document.querySelector("#export");
-		$export.addEventListener("click", async () => {
-			$export.disabled = true;
-			const videoBlob = await $videoRenderer.render($canvas.src);
-			await saveFile(videoBlob);
-			$export.disabled = false;
-			$progress.innerText = "";
-		})
-
-		const $position = document.querySelector("#position");
-		$position.addEventListener("input", (e) => {
-				$canvas.playTime = e.target.valueAsNumber;
-		});
-		$canvas.addEventListener("currentTime", (e) => {
-			$position.valueAsNumber = e.detail;
-		})
-		$canvas.addEventListener("load", (e) => {
-			$position.max = e.detail.end.toString();
-			$canvas.playTime = lastPlaytime;
-		})
-
-		// Feature detection. The API needs to be supported
-		// and the app not run in an iframe.
-		const supportsFileSystemAccess =
-			'showSaveFilePicker' in window &&
-			(() => {
-				try {
-					return window.self === window.top;
-				} catch {
-					return false;
-				}
-			})();
-
-		const saveFile = async (blob) => {
-			return new Promise(async function(resolve,reject){
-				// If the File System Access API is supported…
-				if (supportsFileSystemAccess) {
-					try {
-						// Show the file save dialog.
-						const handle = await showSaveFilePicker({ "id": "exporter", "startIn": "downloads", suggestedName: "video.mp4" });
-						// Write the blob to the file.
-						const writable = await handle.createWritable();
-						await writable.write(blob);
-						await writable.close();
-						resolve();
-						return;
-					} catch (err) {
-						// Fail silently if the user has simply canceled the dialog.
-						if (err.name !== 'AbortError') {
-							reject(err);
-							return;
-						}
-					}
-				}
-				// Fallback if the File System Access API is not supported…
-				// Create the blob URL.
-				const blobURL = URL.createObjectURL(blob);
-				// Create the `<a download>` element and append it invisibly.
-				const a = document.createElement('a');
-				a.href = blobURL;
-				a.download = "video.mp4";
-				a.style.display = 'none';
-				document.body.append(a);
-				// Programmatically click the element.
-				a.click();
-				// Revoke the blob URL and remove the element.
-				setTimeout(() => {
-					URL.revokeObjectURL(blobURL);
-					a.remove();
-					resolve();
-				}, 1000);
-			})
-		};
-
-		playContent(view.state.doc.toString());
-	</script>
+				<dt>obj.value</dt>
+				<dd>Returns the last computed value</dd>
+			</dl>
+			<p>Now lets see again the animation from the beginning where i think it provides an example of all these things:</p>
+			<iframe src="editor.html?url=demo%2Fcircle_draw.js"></iframe>
+	</section>
+	<section>
+		<h1>TODO</h1>
+		<p>There are a lot of things to do currently, here is just a few of them that i have in mind to do eventually. If i dont lose motivation again. This arent in priority order.</p>
+		<ul>
+			<li>Better documentation, obviously. Currently the only way to discover things is navigating the code. Luckily it isnt obfuscated and its rather small.</li>
+			<li>Render math equations. Probably a smaller subset, something like typst or ascii math.</li>
+			<li>Render highlighted code.</li>
+			<li>Better demos.</li>
+			<li>Autocompletion for the provided engine/sdk. This will probably force me to use something like monaco instead of codemirror. But i want the dependency list to be as lean as possible.</li>
+			<li>Improve error messages and the ux in general.</li>
+			<li>Some kind of path object to draw svgs or animate things along a defined path.</li>
+		</ul>
+	</section>
 </body>
 </html>

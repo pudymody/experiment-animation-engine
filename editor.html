@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+	<style>
+		body {
+			display: grid;
+			height: 100svh;
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			background: #555;
+		}
+
+		body:has(#horizontal:checked){
+			grid-template-rows: auto 1fr;
+			grid-template-columns: 1fr 1fr;
+		}
+		body:has(#vertical:checked){
+			grid-template-rows: auto 1fr 1fr;
+		}
+		body:has(#full:checked){
+			grid-template-rows: auto 0 1fr;
+		}
+
+		nav {
+			grid-column: 1/-1;
+			display: flex;
+			box-sizing: border-box;
+			gap: 0.5rem;
+			padding: 0.5rem;
+			background: #2a2b2b;
+			width: 100%;
+
+			label > input {
+				position:absolute;
+				left:-10000px;
+				top:auto;
+				width:1px;
+				height:1px;
+				overflow:hidden;
+			}
+
+			input {
+				margin: 0;
+				flex: 1;
+			}
+
+			button {
+				all: unset;
+				display: block;
+			}
+
+			svg {
+				width: 1.75rem;
+				color: white;
+				cursor: pointer;
+				display: block;
+			}
+		}
+
+		#progress:empty {
+			display: none;
+		}
+		#progress {
+			display: block;
+			position: fixed;
+			background: green;
+			color: white;
+			right: 0.5rem;
+			top: 0.5rem;
+			font-size: 2rem;
+			padding: 0.5rem;
+			border-radius: 0.5rem;
+		}
+
+		.cm-editor {
+			background: white;
+			max-height: 100%;
+			max-width: 100%;
+			overflow: auto;
+		}
+	</style>
+	<nav>
+		<label for="horizontal">
+			<input type="radio" checked name="layout" value="horizontal" id="horizontal"/>
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+		</label>
+		<label for="vertical">
+			<input type="radio" name="layout" value="vertical" id="vertical"/>
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" /></svg>
+		</label>
+		<label for="full">
+			<input type="radio" name="layout" value="full" id="full"/>
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" /></svg>
+		</label>
+		<button id="play">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" /></svg>
+		</button>
+		<button id="stop">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 7.5A2.25 2.25 0 0 1 7.5 5.25h9a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25h-9a2.25 2.25 0 0 1-2.25-2.25v-9Z" /> </svg>
+		</button>
+		<input id="position" type="range" min="0" max="0">
+		<button id="export">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /> </svg>
+		</button>
+		<div id="progress"></div>
+	</nav>
+	<script type="importmap">
+		{
+			"imports": {
+				"engine": "/engine/index.js",
+				"renderer/video": "/renderer/video.js",
+				"renderer/domcanvas": "/renderer/domcanvas.js",
+				"mediabunny": "https://esm.sh/mediabunny",
+				"@codemirror/lang-javascript": "https://esm.sh/@codemirror/lang-javascript",
+				"codemirror": "https://esm.sh/codemirror"
+			}
+		}
+	</script>
+  <script type="module">
+		import VideoRenderer from "renderer/video";
+		import CanvasRenderer from "renderer/domcanvas"
+
+		import {javascript} from "@codemirror/lang-javascript"
+		import {EditorView, basicSetup} from "codemirror"
+
+		let lastPlaytime = 0;
+		function playContent(content){
+			if( $canvas.src != "" ){
+				lastPlaytime = $canvas.playTime;
+				window.URL.revokeObjectURL($canvas.src);
+			}
+			const myBlob = new Blob([content], { type: 'text/javascript' });
+			$canvas.src = window.URL.createObjectURL(myBlob);
+		}
+
+		const myExtension = EditorView.domEventHandlers({
+			blur: (event, view) => {
+				playContent(view.state.doc.toString());
+			}
+		});
+
+		let fileURL = "demo/scene.js";
+		let currentURL = new URL(window.location);
+		let fileQuery = currentURL.searchParams.get("url");
+		if( fileQuery != null ){
+			fileURL = fileQuery;
+		}
+
+		let layout = "horizontal";
+		let layoutQuery = currentURL.searchParams.get("layout");
+		if( layoutQuery != null ){
+			layout = layoutQuery;
+		}
+		const layoutInput = document.getElementById(layout)
+		if( layoutInput !== null ){
+			layoutInput.checked = true;
+		}
+
+		document.querySelector("nav").addEventListener("change", function(e){
+			if( e.target.name !== "layout" ){
+				return;
+			}
+
+			currentURL.searchParams.set("layout", e.target.value);
+			window.history.replaceState(null, null, currentURL);
+		})
+
+		const editorContent = await fetch(fileURL).then( res => res.text() );
+		const view = new EditorView({
+			doc: editorContent,
+			parent: document.body,
+			extensions: [
+				basicSetup,
+				javascript({typescript: true}),
+				myExtension
+			]
+		})
+
+		customElements.define("renderer-canvas", CanvasRenderer);
+
+		// to allow nvim to not mess inodes we have to run
+		//:set nobackup nowritebackup
+
+		const $canvas = document.createElement("renderer-canvas");
+		document.body.appendChild($canvas);
+
+		const $play = document.querySelector("#play");
+		$play.addEventListener("click", () => {
+			$canvas.toggle();
+		})
+
+		const playButton = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" /></svg>`;
+		const pauseButton = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /></svg>`;
+		$canvas.addEventListener("status", (e) => {
+			if( e.detail.playing ){
+				$play.innerHTML = pauseButton
+			}else{
+				$play.innerHTML = playButton
+			}
+		});
+
+		const $stop = document.querySelector("#stop");
+		$stop.addEventListener("click", () => {
+			$canvas.reset();
+		})
+
+		const $videoRenderer = new VideoRenderer;
+		$videoRenderer.addEventListener("progress", ({ detail }) => {
+			$progress.innerText = `${Math.floor(detail.current / detail.total * 100)}%`;
+		})
+		const $progress = document.querySelector("#progress");
+		const $export = document.querySelector("#export");
+		$export.addEventListener("click", async () => {
+			$export.disabled = true;
+			const videoBlob = await $videoRenderer.render($canvas.src);
+			await saveFile(videoBlob);
+			$export.disabled = false;
+			$progress.innerText = "";
+		})
+
+		const $position = document.querySelector("#position");
+		$position.addEventListener("input", (e) => {
+				$canvas.playTime = e.target.valueAsNumber;
+		});
+		$canvas.addEventListener("currentTime", (e) => {
+			$position.valueAsNumber = e.detail;
+		})
+		$canvas.addEventListener("load", (e) => {
+			$position.max = e.detail.end.toString();
+			$canvas.playTime = lastPlaytime;
+		})
+
+		// Feature detection. The API needs to be supported
+		// and the app not run in an iframe.
+		const supportsFileSystemAccess =
+			'showSaveFilePicker' in window &&
+			(() => {
+				try {
+					return window.self === window.top;
+				} catch {
+					return false;
+				}
+			})();
+
+		const saveFile = async (blob) => {
+			return new Promise(async function(resolve,reject){
+				// If the File System Access API is supported…
+				if (supportsFileSystemAccess) {
+					try {
+						// Show the file save dialog.
+						const handle = await showSaveFilePicker({ "id": "exporter", "startIn": "downloads", suggestedName: "video.mp4" });
+						// Write the blob to the file.
+						const writable = await handle.createWritable();
+						await writable.write(blob);
+						await writable.close();
+						resolve();
+						return;
+					} catch (err) {
+						// Fail silently if the user has simply canceled the dialog.
+						if (err.name !== 'AbortError') {
+							reject(err);
+							return;
+						}
+					}
+				}
+				// Fallback if the File System Access API is not supported…
+				// Create the blob URL.
+				const blobURL = URL.createObjectURL(blob);
+				// Create the `<a download>` element and append it invisibly.
+				const a = document.createElement('a');
+				a.href = blobURL;
+				a.download = "video.mp4";
+				a.style.display = 'none';
+				document.body.append(a);
+				// Programmatically click the element.
+				a.click();
+				// Revoke the blob URL and remove the element.
+				setTimeout(() => {
+					URL.revokeObjectURL(blobURL);
+					a.remove();
+					resolve();
+				}, 1000);
+			})
+		};
+
+		playContent(view.state.doc.toString());
+	</script>
+</body>
+</html>

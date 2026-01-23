@@ -3,7 +3,7 @@ import { DefaultScene, Colors } from "engine";
 export default class extends DefaultScene {
 	async setup() {
 		const image = await this.Image({
-			url: "2.jpg",
+			url: "demo/img.jpg",
 			// x: 0,
 			// sx: 0,
 			// y: 0,

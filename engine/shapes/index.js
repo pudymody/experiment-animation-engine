@@ -10,3 +10,5 @@ import Image from "./image.js";
 export { Image };
 import Text from "./text.js";
 export { Text };
+import TextLine from "./textline.js";
+export { TextLine };

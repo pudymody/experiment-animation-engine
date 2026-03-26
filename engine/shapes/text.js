@@ -69,9 +69,17 @@ export default class Text {
      */
     direction;
     /**
-     * public@
+     * @public
      */
     rotate;
+    /**
+     * @public
+     */
+    width;
+    /**
+     * @public
+     */
+    height;
     /**
      * @param {TextProps} opts
      */
@@ -135,6 +143,10 @@ export default class Text {
             ctx.lineWidth = this.strokeWidth.value;
 						ctx.strokeText(this.text.value, this.x.value, this.y.value);
         }
+
+				const textMetrics = ctx.measureText(this.text.value);
+				this.width = Math.max(textMetrics.actualBoundingBoxRight + textMetrics.actualBoundingBoxLeft, textMetrics.width);
+				this.height = Math.max(textMetrics.actualBoundingBoxAscent + textMetrics.actualBoundingBoxDescent, textMetrics.height);
 
 				ctx.restore();
     }

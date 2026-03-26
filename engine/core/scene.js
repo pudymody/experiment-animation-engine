@@ -7,6 +7,7 @@ import Polygon from "../shapes/polygon.js";
 import Rectangle from "../shapes/rectangle.js";
 import EngineImage from "../shapes/image.js";
 import Text from "../shapes/text.js";
+import TextLine from "../shapes/textline.js";
 ;
 
 export class DefaultScene {
@@ -182,6 +183,32 @@ export class DefaultScene {
      */
     Text(opts) {
 			let t = new Text(opts);
+			this.add(t);
+			return t;
+    }
+
+    /**
+     * @param {Text[]} texts 
+     * @returns {TextLine}
+     */
+    TextLine(texts) {
+			let t = new TextLine(texts);
+			this.add(t);
+			return t;
+    }
+
+    /**
+     * @param {string} text
+     * @param {TextProps} opts
+     * @returns {TextLine}
+     */
+    TextLineFromStr(text, opts) {
+			let t = new TextLine(
+				text.split(" ").map( w => new Text({
+					...opts,
+					text: w + " ",
+				}) )
+			);
 			this.add(t);
 			return t;
     }
